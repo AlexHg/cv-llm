@@ -18,10 +18,7 @@ export function CvPageTwo({ cv }: { cv: CvData }) {
           </h2>
           <div className="mt-4 space-y-4">
             {cv.experiencePage2.map((job) => (
-              <CvExperienceItem
-                key={`${job.title}-${job.company}`}
-                {...job}
-              />
+              <CvExperienceItem key={job.id} {...job} />
             ))}
           </div>
         </div>
@@ -45,7 +42,7 @@ export function CvPageTwo({ cv }: { cv: CvData }) {
         <div className="mt-3 space-y-[7px]">
           {cv.sideProjects.map((project) => (
             <CvSideProject
-              key={project.title}
+              key={project.id}
               {...project}
               keywordsLabel={cv.labels.keywords}
             />

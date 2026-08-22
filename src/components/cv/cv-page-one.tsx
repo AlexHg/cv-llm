@@ -56,10 +56,7 @@ export function CvPageOne({ cv }: { cv: CvData }) {
           </h2>
           <div className="mt-4 space-y-4">
             {cv.experiencePage1.map((job) => (
-              <CvExperienceItem
-                key={`${job.title}-${job.company}`}
-                {...job}
-              />
+              <CvExperienceItem key={job.id} {...job} />
             ))}
           </div>
         </div>

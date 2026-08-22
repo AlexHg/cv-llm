@@ -7,7 +7,7 @@ import {
   createCopilotRuntimeHandler,
 } from "@copilotkit/runtime/v2";
 
-const cv = resolveCv("cloud", "es");
+const cv = resolveCv("cloud");
 
 const builtInAgent = new BuiltInAgent({
   model: "openai:gpt-4o-mini",
