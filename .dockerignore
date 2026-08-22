@@ -1,0 +1,47 @@
+# Dependencias y artefactos de build
+node_modules/
+.pnpm-store/
+.next/
+out/
+dist/
+build/
+.vercel/
+
+# Entorno y secretos (se inyectan en runtime)
+.env
+.env.*
+!.env.example
+
+# Git, IDE y docs
+.git/
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+.docs/
+*.md
+AGENTS.md
+CLAUDE.md
+
+# Docker
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+docker-compose*.yaml
+compose.yml
+compose.yaml
+
+# Tests, lint y caches
+coverage/
+.eslintcache
+.swc/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+*.pem
