@@ -93,7 +93,7 @@ describe("prepareOpenResponsesBody", () => {
       request(),
     );
     expect("body" in resumed).toBe(true);
-    if (!("body" in resumed)) return;
+    if (!("body" in resumed) || !resumed.body) return;
     expect(resumed.body.input).toEqual([]);
   });
 
@@ -107,7 +107,7 @@ describe("prepareOpenResponsesBody", () => {
       request(),
     );
     expect("body" in prepared).toBe(true);
-    if (!("body" in prepared)) return;
+    if (!("body" in prepared) || !prepared.body) return;
 
     const instructions = String(prepared.body.instructions);
     expect(prepared.body.model).toBe("gpt-4o-mini");
@@ -120,7 +120,7 @@ describe("prepareOpenResponsesBody", () => {
       { input: [], model: "openai:gpt-4o" },
       request(),
     );
-    expect("body" in openai && openai.body.model).toBe("gpt-4o");
+    expect("body" in openai && openai.body?.model).toBe("gpt-4o");
   });
 });
 
