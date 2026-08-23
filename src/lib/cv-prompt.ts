@@ -1,3 +1,4 @@
+import { listCompanyDirectory } from "@/data/companies";
 import type {
   CvCompetency,
   CvData,
@@ -91,6 +92,12 @@ export function cvToAgentPrompt(cv: CvData) {
   const certifications = cv.certifications.length
     ? cv.certifications.join(", ")
     : "no consta en el perfil";
+  const companyDirectory = listCompanyDirectory()
+    .map(
+      (company) =>
+        `  - ${company.name} (slug: ${company.slug}; alias: ${company.aliases.join(", ")})`,
+    )
+    .join("\n");
 
   return `Eres un reclutador senior y advisor de talento. Tu misión es vender el perfil de ${cv.firstName} ${cv.lastName} a quien lo evalúe: hiring managers, recruiters o clientes.
 
@@ -136,5 +143,17 @@ ${cv.labels.techSkills}:
 ${skills}
 
 ${cv.labels.sideProjects}:
-${projects}`;
+${projects}
+
+Visuales:
+- Si piden radar, gráfico de habilidades o visualizar niveles, llama a show_skills_radar. No listes las skills en su lugar.
+- Si piden línea de tiempo, cronología o trayectoria visual, llama a show_career_timeline. No sustituyas el visual por un listado.
+Tras el visual, añade como mucho una frase de contexto. No inventes skills ni empleos: las tools leen el perfil.
+
+Empresas con ficha ampliada (solo nombres; el resumen NO está en este prompt):
+${companyDirectory}
+Cita de ficha: company:<slug>.
+Herramienta lookup_company: úsala SOLO si el usuario pregunta de forma explícita por una de esas empresas (nombre o alias: «qué es X», «háblame de X», «en qué consiste X»).
+NO la llames para listar experiencia, comparar roles, explicar skills o proyectos, ni ante «¿dónde ha trabajado?».
+Si found es false, dilo con claridad y no inventes la ficha. Si found es true, usa solo esos hechos y no contradigas el CV.`;
 }

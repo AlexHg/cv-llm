@@ -1,8 +1,19 @@
 "use client";
 
-import { CopilotChat } from "@copilotkit/react-core/v2";
+import { CopilotChat, useConfigureSuggestions } from "@copilotkit/react-core/v2";
+import {
+  chatSuggestions,
+  chatSuggestionsAvailable,
+} from "@/data/chat-suggestions";
+
+const suggestionsConfig = {
+  suggestions: chatSuggestions,
+  available: chatSuggestionsAvailable,
+};
 
 export function AgentPanel() {
+  useConfigureSuggestions(suggestionsConfig);
+
   return (
     <aside className="flex h-[50vh] min-h-0 w-full shrink-0 flex-col border-t border-zinc-300 bg-white lg:h-full lg:w-[640px] lg:border-t-0 lg:border-l lg:border-black/25">
       <header className="flex h-14 shrink-0 flex-col justify-center border-b border-black/40 bg-ink px-4">
