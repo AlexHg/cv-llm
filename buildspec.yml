@@ -1,8 +1,21 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - echo "[INFO] Installing pnpm..."
+      - npm install -g pnpm@11.8.0
+      - echo "[INFO] Installing dependencies..."
+      - pnpm install --frozen-lockfile
+
   pre_build:
     commands:
+      - echo "[INFO] Running tests..."
+      - pnpm test
+      - echo "[INFO] Tests passed."
+
       - echo "[INFO] Logging in to Amazon ECR..."
       - aws --version
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPOSITORY_URI
@@ -10,59 +23,29 @@ phases:
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
 
-      # - echo "[INFO] Retrieving SSH key from Parameter Store"
-      # - SSH_KEY_CONTENT=$(aws ssm get-parameter --name /bitbucket/ssh_rsa --with-decryption --query 'Parameter.Value' --output text)
-      # - echo "$SSH_KEY_CONTENT" > ./bitbucket_key
-      # - chmod 600 ./bitbucket_key
-      # - echo "[INFO] SSH key retrieved and saved successfully"
-      
-      - echo "[INFO] Logging in to Docker Hub"
+      - echo "[INFO] Logging in to Docker Hub..."
       - DOCKER_USERNAME=$(aws ssm get-parameter --name /dockerhub/username --query 'Parameter.Value' --output text)
       - DOCKER_PASSWORD=$(aws ssm get-parameter --name /dockerhub/password --with-decryption --query 'Parameter.Value' --output text)
-      - |
-        echo "Docker username $DOCKER_USERNAME"
-        echo "Docker password length ${#DOCKER_PASSWORD}"
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - echo "[INFO] Successfully logged in to Docker Hub"
 
   build:
     commands:
-      - echo "[INFO] Pulling the Docker image..."
+      - echo "[INFO] Pulling the cached Docker image..."
       - docker pull $REPOSITORY_URI:latest || true
-      - echo "[INFO] Docker image pulled successfully!"
 
-      - echo "[INFO] Checking if the cached Docker image exists..."
+      - echo "[INFO] Building Docker image..."
       - IMAGES_FOUND=$(aws ecr describe-images --repository-name $(basename $REPOSITORY_URI) --region $AWS_DEFAULT_REGION 2>/dev/null | jq '.imageDetails | length')
       - |
         if [[ "$IMAGES_FOUND" -gt 0 ]]; then
           echo "[INFO] Cached image found, building with cache..."
-          docker build --cache-from $REPOSITORY_URI:latest -t $REPOSITORY_URI:latest \
-            --build-arg IS_DEPLOY=true \
-            --build-arg VERSION=$IMAGE_TAG \
-            --build-arg SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
-            --build-arg SENTRY_PROJECT_NAME=$SENTRY_PROJECT_NAME .
+          docker build --cache-from $REPOSITORY_URI:latest -t $REPOSITORY_URI:latest .
         else
           echo "[WARNING] No cached image found, proceeding without cache."
-          docker build -t $REPOSITORY_URI:latest \
-            --build-arg IS_DEPLOY=true \
-            --build-arg VERSION=$IMAGE_TAG \
-            --build-arg SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
-            --build-arg SENTRY_PROJECT_NAME=$SENTRY_PROJECT_NAME .
+          docker build -t $REPOSITORY_URI:latest .
         fi
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
       - echo "[INFO] Docker image built successfully!"
-      
-      # - echo "[INFO] Running container to test the application..."
-      # - docker run -d -p 80:80 --name test_container $REPOSITORY_URI:$IMAGE_TAG
-      # - docker ps
-      # - echo "[INFO] Sleeping to allow application to start..."
-      # - sleep 15 # Espera 15 segundos para permitir que la aplicación se inicie
-      # - echo "[INFO] Checking container logs..."
-      # - docker logs test_container > container_logs.txt
-      # - echo "[INFO] Verifying application..."
-      # - grep -q "Nest application successfully started" container_logs.txt || (echo "Application failed to start" && exit 1)
-      # - docker stop test_container
-      # - docker rm test_container
 
   post_build:
     commands:
@@ -70,6 +53,7 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo "[INFO] Docker image pushed successfully!"
-      - echo '[{"name":"'$CONTAINER_NAME'","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imagedefinitions.json 
+      - echo '[{"name":"'$CONTAINER_NAME'","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imagedefinitions.json
+
 artifacts:
   files: imagedefinitions.json
