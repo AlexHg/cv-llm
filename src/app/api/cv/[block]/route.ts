@@ -25,5 +25,5 @@ export async function GET(
   }
 
   const profile = profileFromRequest(request);
-  return cvJson(block, profile, getCvBlock(block, profile));
+  return cvJson(block, profile, getCvBlock(block));
 }

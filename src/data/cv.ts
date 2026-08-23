@@ -19,13 +19,18 @@ export {
   PROFILE_IDS,
 } from "./types";
 
+export const profileSummary = {
+  id: "cloud" as const,
+  label: "Arquitecto Cloud / Solutions",
+};
+
 export const sectionLabels: CvLabels = {
   about: "SOBRE MÍ",
   experience: "EXPERIENCIA",
   experienceContinued: "(CONTINUACIÓN)",
   education: "EDUCACIÓN",
   expertise: "EXPERTISE",
-  techSkills: "HABILIDADES TECH",
+  techSkills: "HABILIDADES",
   sideProjects: "PROYECTOS DESTACADOS",
   keywords: "Palabras clave",
   downloadPdf: "DESCARGAR PDF",
@@ -37,27 +42,27 @@ export const sectionLabels: CvLabels = {
 };
 
 export const expertiseItems: CvExpertiseItem[] = [
-  { id: "fullstack", name: "Desarrollo Full Stack" },
-  { id: "frontend", name: "Frontend y Web Components" },
-  { id: "devops", name: "DevOps - CD/CI" },
-  { id: "iac", name: "Infraestructura como código" },
-  { id: "genai", name: "Desarrollo Gen-AI" },
-  { id: "prompting", name: "Técnicas de prompting" },
-  { id: "databases", name: "Bases de datos SQL y NoSQL" },
-  { id: "containers", name: "Containerización" },
-  { id: "saas", name: "Software as a Service" },
-  { id: "scrum", name: "SCRUM y Agile" },
   { id: "aws", name: "Arquitectura AWS" },
+  { id: "saas", name: "Software as a Service" },
+  { id: "iac", name: "Infraestructura como código" },
+  { id: "containers", name: "Containerización" },
+  { id: "devops", name: "DevOps - CD/CI" },
   { id: "hexagonal", name: "Arquitectura Hexagonal y Clean" },
+  { id: "fullstack", name: "Desarrollo Full Stack" },
+  { id: "databases", name: "Bases de datos SQL y NoSQL" },
+  { id: "genai", name: "Desarrollo Gen-AI" },
+  { id: "frontend", name: "Frontend y Web Components" },
+  { id: "scrum", name: "SCRUM y Agile" },
+  { id: "prompting", name: "Técnicas de prompting" },
 ];
 
 export const cvBase: CvBase = {
   firstName: "Alejandro",
   lastName: "Hernández",
-  headline: "ARQUITECTO CLOUD & SAAS  |  CREADOR DE PRODUCTOS GEN-AI",
+  headline: "ARQUITECTO CLOUD & SAAS  |  GEN-AI BUILDER",
   photo: "/profile.jpeg",
   about:
-    "Líder tecnológico innovador con más de una década de experiencia diseñando, desarrollando y escalando software y soluciones en la nube. He ayudado a startups y equipos empresariales a acelerar su crecimiento construyendo MVPs y sistemas listos para producción con AWS y tecnologías full-stack modernas. Apasionado por la IA generativa, el diseño de arquitectura y la mentoría técnica, me desenvuelvo en la intersección entre innovación, escalabilidad e impacto real.",
+    "Arquitecto Cloud y SaaS con más de una década diseñando, desarrollando y escalando sistemas listos para producción en AWS. He ayudado a startups y equipos empresariales a acelerar su crecimiento construyendo MVPs y plataformas cloud resilientes con tecnologías full-stack modernas, desde el diseño de arquitectura hasta la excelencia operativa. Fuerte enfoque en alta disponibilidad, diseño consciente de costos y productos habilitados con Gen-AI que cumplen restricciones de negocio reales. Conecto objetivos de producto con decisiones de infraestructura para que los equipos entreguen con confiabilidad a escala.",
   contact: [
     { type: "phone", value: "+52 55 8449 8418" },
     { type: "email", value: "alejandro.hg.dev@gmail.com" },
@@ -81,7 +86,7 @@ export const cvBase: CvBase = {
       period: "Jul 2024 – Mar 2026",
       page: 1,
       description:
-        "Lideré el desarrollo y la mejora continua de la plataforma SaaS principal de la empresa. Dirijo la estrategia técnica, la arquitectura y la entrega de funcionalidades para garantizar escalabilidad y alta disponibilidad. También lideré la creación de un sistema de OCR y validación de facturas, y una plataforma de generación de tarjetas prepago bajo demanda, integrando automatización y confiabilidad en todo el ecosistema.",
+        "Lideré la arquitectura y la mejora continua de la plataforma SaaS principal de la empresa, garantizando escalabilidad y alta disponibilidad. Dirijo la estrategia técnica y la entrega de funcionalidades listas para la nube. Diseñé soluciones cloud desacopladas usando tecnologías como Redis, Memcache, Aurora, ECS, entre otras. También lideré un sistema de OCR/validación de facturas y una plataforma de tarjetas prepago bajo demanda, integrando automatización y confiabilidad en el ecosistema.",
     },
     {
       id: "cerocatorce-techlead",
@@ -99,7 +104,7 @@ export const cvBase: CvBase = {
       period: "Jun 2019 – May 2022",
       page: 2,
       description:
-        "Como uno de los primeros miembros del equipo digital, ayudé a diseñar e implementar la infraestructura de software principal de la empresa, desarrollando y manteniendo nuevas funcionalidades. Construí integraciones con más de cinco proveedores de gift cards, mejoré la seguridad del sistema y contribuí a las primeras versiones de productos clave como chatbots, gestores de recompensas y redes internas. También integré nuestros sistemas con plataformas como AWS, Twilio y Sendinblue.",
+        "Como miembro inicial del equipo digital, diseñé e implementé la infraestructura de software y cloud principal. Construí integraciones con proveedores de gift cards, reforcé la seguridad y conecté sistemas con AWS, Twilio y Sendinblue — sentando las bases de productos SaaS escalables.",
     },
     {
       id: "welfare-fullstack",
@@ -118,19 +123,46 @@ export const cvBase: CvBase = {
   },
   expertise: expertiseItems,
   skills: [
-    { name: "Typescript & JS", level: 5 },
-    { name: "PHP & Symfony", level: 4 },
-    { name: "Node.js / Nestjs", level: 5 },
-    { name: "VueJS / Nuxt", level: 5 },
-    { name: "ReactJS / Next.js", level: 3 },
     { name: "AWS", level: 5 },
     { name: "Terraform", level: 4 },
     { name: "Docker", level: 5 },
+    { name: "Node.js / Nestjs", level: 5 },
+    { name: "Typescript & JS", level: 5 },
+    { name: "VueJS / Nuxt", level: 5 },
+    { name: "Python", level: 4 },
     { name: "Linux", level: 3 },
-    { name: "CSS & Design", level: 4 },
     { name: "GIT", level: 4 },
+    { name: "ReactJS / Next.js", level: 3 },
+    { name: "PHP & Symfony", level: 4 },
+    { name: "CSS & Design", level: 4 },
   ],
   sideProjects: [
+    {
+      id: "dti-cloud",
+      title: "DTI Cloud",
+      meta: "(2021) – Canadá",
+      description:
+        "Lideré la migración de sistemas internos de la empresa desde servidores dedicados a AWS, incluyendo autoescalado y bases de datos gestionadas – <i>Diesel Tech Industries como consultoría independiente (Canadá)</i>",
+      keywords: "AWS, Elastic Beanstalk, SQS, Auto-scaling, RDS Databases",
+    },
+    {
+      id: "incentive-machine",
+      title: "Incentive Machine",
+      meta: "(2021) – México",
+      description:
+        "Lideré una plataforma SaaS multitenant para la distribución de cupones y gift cards a usuarios finales y empresas de marketing, con múltiples servicios de distribución – <i>Cerocatorce (México)</i>",
+      keywords:
+        "NestJS (Node.js), MongoDB, Nuxt (Vue), AWS, Microservices, Multitenancy, ECS, Terraform, SQS",
+    },
+    {
+      id: "nuclear-hub",
+      title: "Nuclear Builders / SaaS Hub",
+      meta: "(2022–2025) – México – Proyecto personal",
+      description:
+        "Desarrollé una plataforma SaaS no-code multitenant que genera aplicaciones personalizables, reutilizando la misma infraestructura por cada servicio que crea – <i>Proyecto independiente</i>",
+      keywords:
+        "NestJS (Node.js), MongoDB, Next.js (React), AWS, Microservices, Multitenancy, Redis, Terraform, Gen-AI, Prompt Engineering",
+    },
     {
       id: "joifilabs",
       title: "Joifilabs Middleware & Backoffice",
@@ -139,14 +171,6 @@ export const cvBase: CvBase = {
         "Lideré el desarrollo de un middleware centralizado entre sistemas a bordo de trenes europeos e infraestructura en tierra, habilitando comunicación en tiempo real, sincronización de datos y APIs seguras entre flotas – <i>Joifilabs (España) – Independiente (Nuclear)</i>",
       keywords:
         "Nuxt (Vue), PostgreSQL, Python, FastAPI, Ansible, Docker, MQTT, Redis",
-    },
-    {
-      id: "predictify",
-      title: "Predictify Genomic Analysis",
-      meta: "(2024) – España",
-      description:
-        "Lideré el desarrollo frontend de una plataforma científica para carga, filtrado, clasificación de datos y generación de reportes mediante un flujo interactivo y colaborativo – <i>Predictify (España) – Independiente (Nuclear)</i>",
-      keywords: "MongoDB, Nuxt (Vue), AWS, Charts, Data visualization",
     },
     {
       id: "billprotech",
@@ -166,32 +190,6 @@ export const cvBase: CvBase = {
       keywords: "NestJS (Node.js), MongoDB/CosmosDB, Nuxt (Vue), Azure",
     },
     {
-      id: "nuclear-hub",
-      title: "Nuclear Builders / SaaS Hub",
-      meta: "(2022–2025) – México – Proyecto personal",
-      description:
-        "Desarrollé una plataforma SaaS no-code multitenant que genera aplicaciones personalizables, reutilizando la misma infraestructura por cada servicio que crea – <i>Proyecto independiente</i>",
-      keywords:
-        "NestJS (Node.js), MongoDB, Next.js (React), AWS, Microservices, Multitenancy, Redis, Terraform, Gen-AI, Prompt Engineering",
-    },
-    {
-      id: "incentive-machine",
-      title: "Incentive Machine",
-      meta: "(2021) – México",
-      description:
-        "Lideré una plataforma SaaS multitenant para la distribución de cupones y gift cards a usuarios finales y empresas de marketing, con múltiples servicios de distribución – <i>Cerocatorce (México)</i>",
-      keywords:
-        "NestJS (Node.js), MongoDB, Nuxt (Vue), AWS, Microservices, Multitenancy, ECS, Terraform, SQS",
-    },
-    {
-      id: "lexic",
-      title: "Lexic.ai",
-      meta: "(2020) – España",
-      description:
-        "Lideré una plataforma SaaS pay-as-you-go que permite a las empresas consumir servicios de Lexical AI como análisis de emociones, detección de palabras clave y categorización de entidades – <i>Lexic.ai (España)</i>",
-      keywords: "Loopback, Express, MongoDB, Vue.js, AWS, Multitenancy",
-    },
-    {
       id: "issste",
       title: "ISSSTE Data Warehouse",
       meta: "(2021–2022) – México",
@@ -201,12 +199,20 @@ export const cvBase: CvBase = {
         "BigQuery, GCP, Scheduling, Express, Big Data, Google Data Studio, SQL",
     },
     {
-      id: "dti-cloud",
-      title: "DTI Cloud",
-      meta: "(2021) – Canadá",
+      id: "predictify",
+      title: "Predictify Genomic Analysis",
+      meta: "(2024) – España",
       description:
-        "Lideré la migración de sistemas internos de la empresa desde servidores dedicados a AWS, incluyendo autoescalado y bases de datos gestionadas – <i>Diesel Tech Industries como consultoría independiente (Canadá)</i>",
-      keywords: "AWS, Elastic Beanstalk, SQS, Auto-scaling, RDS Databases",
+        "Lideré el desarrollo frontend de una plataforma científica para carga, filtrado, clasificación de datos y generación de reportes mediante un flujo interactivo y colaborativo – <i>Predictify (España) – Independiente (Nuclear)</i>",
+      keywords: "MongoDB, Nuxt (Vue), AWS, Charts, Data visualization",
+    },
+    {
+      id: "lexic",
+      title: "Lexic.ai",
+      meta: "(2020) – España",
+      description:
+        "Lideré una plataforma SaaS pay-as-you-go que permite a las empresas consumir servicios de Lexical AI como análisis de emociones, detección de palabras clave y categorización de entidades – <i>Lexic.ai (España)</i>",
+      keywords: "Loopback, Express, MongoDB, Vue.js, AWS, Multitenancy",
     },
   ],
 };

@@ -174,17 +174,6 @@ export interface CvBase {
   sideProjects: CvProjectSource[];
 }
 
-export interface ProfileOverride {
-  id: ProfileId;
-  label: string;
-  headline: string;
-  about: string;
-  experienceOverrides?: Record<string, string>;
-  expertiseOrder?: ExpertiseId[];
-  skillsOrder?: string[];
-  sideProjectsOrder?: string[];
-}
-
 export interface CvBlockResponse<T> {
   block: CvBlockId | "cv";
   profile: ProfileId;

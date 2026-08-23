@@ -1,5 +1,4 @@
-import { cvBase, sectionLabels } from "./cv";
-import { profileOverrides } from "./profiles";
+import { cvBase, profileSummary, sectionLabels } from "./cv";
 import type {
   CvAbout,
   CvBlockId,
@@ -16,36 +15,8 @@ import type {
   CvSkill,
   CvSkillsBlock,
   ProfileId,
-  ProfileOverride,
 } from "./types";
 import { DEFAULT_PROFILE, isCvBlockId, isProfileId } from "./types";
-
-function reorderByKey<T>(
-  items: T[],
-  order: string[] | undefined,
-  getKey: (item: T) => string,
-): T[] {
-  if (!order?.length) return items;
-
-  const map = new Map(items.map((item) => [getKey(item), item]));
-  const result: T[] = [];
-  const seen = new Set<string>();
-
-  for (const key of order) {
-    const item = map.get(key);
-    if (item) {
-      result.push(item);
-      seen.add(key);
-    }
-  }
-
-  for (const item of items) {
-    const key = getKey(item);
-    if (!seen.has(key)) result.push(item);
-  }
-
-  return result;
-}
 
 export function parseProfile(value: unknown): ProfileId {
   return isProfileId(value) ? value : DEFAULT_PROFILE;
@@ -55,28 +26,19 @@ export function parseBlock(value: unknown): CvBlockId | null {
   return isCvBlockId(value) ? value : null;
 }
 
-export function getProfileOverride(profile: ProfileId): ProfileOverride {
-  return profileOverrides[profile] ?? profileOverrides[DEFAULT_PROFILE];
-}
-
-export function getIdentity(profile: ProfileId = DEFAULT_PROFILE): CvIdentity {
-  const override = getProfileOverride(profile);
-
+export function getIdentity(): CvIdentity {
   return {
     firstName: cvBase.firstName,
     lastName: cvBase.lastName,
-    headline: override.headline,
+    headline: cvBase.headline,
     photo: cvBase.photo,
-    profile: {
-      id: override.id,
-      label: override.label,
-    },
+    profile: profileSummary,
   };
 }
 
-export function getAbout(profile: ProfileId = DEFAULT_PROFILE): CvAbout {
+export function getAbout(): CvAbout {
   return {
-    text: getProfileOverride(profile).about,
+    text: cvBase.about,
   };
 }
 
@@ -90,18 +52,14 @@ export function getContact(): CvContactBlock {
   };
 }
 
-export function getExperience(
-  profile: ProfileId = DEFAULT_PROFILE,
-): CvExperienceBlock {
-  const overrides = getProfileOverride(profile).experienceOverrides;
-
+export function getExperience(): CvExperienceBlock {
   return {
     items: cvBase.experience.map((job) => ({
       id: job.id,
       title: job.title,
       company: job.company,
       period: job.period,
-      description: overrides?.[job.id] ?? job.description,
+      description: job.description,
       page: job.page,
     })),
   };
@@ -111,78 +69,51 @@ export function getEducation(): CvEducation {
   return { ...cvBase.education };
 }
 
-export function getExpertise(
-  profile: ProfileId = DEFAULT_PROFILE,
-): CvExpertiseBlock {
-  return {
-    items: reorderByKey(
-      cvBase.expertise,
-      getProfileOverride(profile).expertiseOrder,
-      (item) => item.id,
-    ),
-  };
+export function getExpertise(): CvExpertiseBlock {
+  return { items: cvBase.expertise };
 }
 
-export function getSkills(
-  profile: ProfileId = DEFAULT_PROFILE,
-): CvSkillsBlock {
-  return {
-    items: reorderByKey(
-      cvBase.skills,
-      getProfileOverride(profile).skillsOrder,
-      (skill) => skill.name,
-    ),
-  };
+export function getSkills(): CvSkillsBlock {
+  return { items: cvBase.skills };
 }
 
-export function getProjects(
-  profile: ProfileId = DEFAULT_PROFILE,
-): CvProjectsBlock {
-  return {
-    items: reorderByKey(
-      cvBase.sideProjects,
-      getProfileOverride(profile).sideProjectsOrder,
-      (project) => project.id,
-    ),
-  };
+export function getProjects(): CvProjectsBlock {
+  return { items: cvBase.sideProjects };
 }
 
 export function getProfiles(): CvProfilesBlock {
   return {
-    items: Object.values(profileOverrides).map((profile) => ({
-      id: profile.id,
-      label: profile.label,
-    })),
+    items: [profileSummary],
     default: DEFAULT_PROFILE,
   };
 }
 
-export function getCvBlock(block: CvBlockId, profile: ProfileId) {
+export function getCvBlock(block: CvBlockId) {
   switch (block) {
     case "identity":
-      return getIdentity(profile);
+      return getIdentity();
     case "about":
-      return getAbout(profile);
+      return getAbout();
     case "contact":
       return getContact();
     case "experience":
-      return getExperience(profile);
+      return getExperience();
     case "education":
       return getEducation();
     case "expertise":
-      return getExpertise(profile);
+      return getExpertise();
     case "skills":
-      return getSkills(profile);
+      return getSkills();
     case "projects":
-      return getProjects(profile);
+      return getProjects();
     case "profiles":
       return getProfiles();
   }
 }
 
 export function resolveCv(profile: ProfileId = DEFAULT_PROFILE): CvData {
-  const identity = getIdentity(profile);
-  const experience = getExperience(profile).items;
+  const identity = getIdentity();
+  const experience = getExperience().items;
   const byPage = (page: 1 | 2): CvExperience[] =>
     experience.filter((job) => job.page === page);
 
@@ -191,14 +122,14 @@ export function resolveCv(profile: ProfileId = DEFAULT_PROFILE): CvData {
     lastName: identity.lastName,
     headline: identity.headline,
     photo: identity.photo,
-    about: getAbout(profile).text,
+    about: getAbout().text,
     contact: getContact().items,
     experiencePage1: byPage(1),
     experiencePage2: byPage(2),
     education: getEducation(),
-    expertise: getExpertise(profile).items.map((item) => item.name),
-    skills: getSkills(profile).items satisfies CvSkill[],
-    sideProjects: getProjects(profile).items satisfies CvSideProject[],
+    expertise: getExpertise().items.map((item) => item.name),
+    skills: getSkills().items satisfies CvSkill[],
+    sideProjects: getProjects().items satisfies CvSideProject[],
     labels: sectionLabels,
     profile,
   };
