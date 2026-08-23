@@ -72,7 +72,7 @@ El árbol SHALL envolver la app en `CopilotProvider` (`CopilotKit` con `runtimeU
 Ambos paneles SHALL tener una barra de `56px` (`h-14`), fondo `ink` (`#2f3542`), borde inferior.
 
 - **CV**: izquierda = selector de color; derecha = botón de descarga. Clase `no-print` (oculta al imprimir).
-- **Agente**: título `Curriculum Agent`, subtítulo `Perfil del candidato` en blanco atenuado.
+- **Agente**: izquierda = título `Curriculum Agent` y subtítulo `Perfil del candidato` en blanco atenuado; derecha = botón para reiniciar la conversación (RF-UI-16).
 
 ## 7. Diseño del PDF
 
@@ -239,6 +239,28 @@ Valores por defecto (cubren FR 1–4; las tres últimas, `SPEC-A2UI-001`):
 
 Las pastillas extra cubren A2UI, empresas (`SPEC-A2UI-001`) y el cambio de acento (RF-UI-15). El árbol SHALL envolver la app en `CopilotProvider` (catálogo A2UI) en lugar de `CopilotKit` directo.
 
+### RF-UI-16 — Reiniciar conversación
+
+La cabecera del agente SHALL incluir un botón a la derecha:
+
+| Estado | Texto | Comportamiento |
+| --- | --- | --- |
+| Idle | `Reiniciar` + icono de recarga | Aborta un turno en curso, si lo hay, y abre un hilo nuevo |
+| Conversación vacía | Igual, `disabled` | No hace nada: ya está en el estado de bienvenida |
+
+Estilo: píldora blanca, `h-10`, tracking amplio, alineada al botón de descarga del CV.
+
+Al pulsar, el chat MUST:
+
+1. Detener la generación en curso (`abortRun` si `agent.isRunning`).
+2. Vaciar los mensajes del agente (`setMessages([])`) **antes** de recargar sugerencias: `before-first-message` solo aplica con `messageCount === 0`.
+3. Llamar a `startNewThread()` de `useCopilotChatConfiguration` (UUID nuevo, `hasExplicitThreadId=false`).
+4. Llamar a `reloadSuggestions()`: CopilotKit no restaura las pastillas estáticas al cambiar de hilo.
+
+El welcome y las pastillas de RF-UI-14 MUST volver a verse, igual que al cargar `/` por primera vez.
+
+El panel del agente SHALL envolver cabecera y `CopilotChat` en `CopilotChatConfigurationProvider` para que el botón (fuera de `CopilotChat`) comparta el hilo.
+
 ## 11. Requisitos no funcionales
 
 | ID | Requisito |
@@ -276,6 +298,7 @@ Las pastillas extra cubren A2UI, empresas (`SPEC-A2UI-001`) y el cambio de acent
 - [ ] Una pregunta ajena al perfil recibe una disculpa y redirige al CV (FR 12).
 - [ ] El estado vacío muestra las pastillas de `src/data/chat-suggestions.ts` (perfil, A2UI, Chequemotiva y color). Clic envía `message`.
 - [ ] Pedir “cambia el color a azul” actualiza el acento del CV y persiste en `cv-accent`.
+- [ ] El header del agente muestra `Reiniciar` a la derecha; al pulsar, el chat vuelve al welcome y a las pastillas. Si no hay mensajes, el botón está deshabilitado.
 
 ## 14. Trazabilidad
 
@@ -290,6 +313,6 @@ Las pastillas extra cubren A2UI, empresas (`SPEC-A2UI-001`) y el cambio de acent
 | RF-UI-07 | `src/app/page.tsx`, `src/data/resolve-cv.ts` |
 | RF-UI-08 … RF-UI-10, RF-UI-15 | `src/components/cv/cv-accent-picker.tsx`, `src/lib/accent.tsx`, `src/components/accent-chat-tool.tsx` |
 | RF-UI-11, RF-UI-12 | `src/components/cv/cv-download-button.tsx`, `src/lib/use-pdf-download.ts` |
-| RF-UI-13 | `src/components/agent-panel.tsx` |
+| RF-UI-13, RF-UI-16 | `src/components/agent-panel.tsx`, `src/components/restart-conversation-button.tsx` |
 | RF-UI-14 | `src/data/chat-suggestions.ts`, `src/components/agent-panel.tsx` |
 | Referencia visual | `.cursor/specs/copilot-ui/curriculum-example.pdf` |
