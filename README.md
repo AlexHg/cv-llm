@@ -36,7 +36,7 @@ Abre [http://localhost:3000](http://localhost:3000). El chat de CopilotKit apare
 
 ## Integración Open Responses
 
-Contratos: [Open Responses](.cursor/specs/open-responses/SPEC.md) (`SPEC-OR-001`), [interfaz CopilotKit + CV](.cursor/specs/copilot-ui/SPEC.md) (`SPEC-UI-001`).
+Contratos: [Open Responses](.cursor/specs/open-responses/SPEC.md) (`SPEC-OR-001`), [interfaz CopilotKit + CV](.cursor/specs/copilot-ui/SPEC.md) (`SPEC-UI-001`), [A2UI y fichas de empresa](.cursor/specs/a2ui-company-tools/SPEC.md) (`SPEC-A2UI-001`).
 
 Otros sistemas pueden hablar con el agente en `POST /v1/responses`, con `Authorization: Bearer $INTERNAL_API_KEY`.
 
@@ -52,11 +52,11 @@ curl -s http://localhost:3000/v1/responses \
 
 El perfil se elige con `model` (`cv-cloud`, `cv-fullstack`, `cv-techlead`, `cv-genai`, `cv-devops`), `metadata.profile` o `?profile=cloud`.
 
-La API estructurada del CV (`/api/cv` y `/api/cv/:block`) usa la misma API key.
+La API estructurada del CV (`/api/cv` y `/api/cv/:block`) y la de empresas (`/api/companies`, `/api/companies/:slug`) usan la misma API key. Las fichas de empresa no van en el prompt: el chat las pide con la tool `lookup_company` solo si el usuario nombra una empresa.
 
 ## Stack
 
 - Next.js (App Router)
 - CopilotKit (`@copilotkit/react-core`, `@copilotkit/runtime`)
-- Runtime en `/api/copilotkit` con `BuiltInAgent` sobre Open Responses
+- Runtime en `/api/copilotkit` con `BuiltInAgent` sobre Open Responses, A2UI (`RadarChart`, `Timeline`) y tool `lookup_company`
 - Endpoint Open Responses en `/v1/responses`

@@ -1,6 +1,6 @@
 Requerimientos funcionales del agente de CV
 
-Specs de features: [Open Responses](./specs/open-responses/SPEC.md) (`SPEC-OR-001`), [Interfaz CopilotKit + CV](./specs/copilot-ui/SPEC.md) (`SPEC-UI-001`), [Perfil estructurado](./specs/cv-structured-profile/SPEC.md) (`SPEC-CV-002`).
+Specs de features: [Open Responses](./specs/open-responses/SPEC.md) (`SPEC-OR-001`), [Interfaz CopilotKit + CV](./specs/copilot-ui/SPEC.md) (`SPEC-UI-001`), [Perfil estructurado](./specs/cv-structured-profile/SPEC.md) (`SPEC-CV-002`), [A2UI y fichas de empresa](./specs/a2ui-company-tools/SPEC.md) (`SPEC-A2UI-001`).
 
 1. Presentar el perfil profesional 👤
    El agente deberá responder preguntas sobre:

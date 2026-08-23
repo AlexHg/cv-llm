@@ -65,7 +65,7 @@ Sin esta UI:
 
 El documento SHALL estar en `lang="es"`. Título: `Alejandro Hernández — Agente de CV`.
 
-El árbol SHALL envolver la app en `CopilotKit` con `runtimeUrl="/api/copilotkit"` y `useSingleEndpoint={false}`.
+El árbol SHALL envolver la app en `CopilotProvider` (`CopilotKit` con `runtimeUrl="/api/copilotkit"`, `useSingleEndpoint={false}` y catálogo A2UI; `SPEC-A2UI-001`).
 
 ### RF-UI-02 — Cabeceras
 
@@ -202,6 +202,33 @@ Labels en español:
 
 El chat MUST NOT pedir `INTERNAL_API_KEY`. Las respuestas siguen el prompt del perfil Cloud (`SPEC-OR-001` RF-OR-12).
 
+### RF-UI-14 — Preguntas de ejemplo
+
+El estado vacío del chat SHALL mostrar pastillas clicables de preguntas de ejemplo.
+
+La lista MUST vivir en `src/data/chat-suggestions.ts`, no en el JSX. Cada ítem:
+
+| Campo | Uso |
+| --- | --- |
+| `title` | Texto visible en la pastilla |
+| `message` | Mensaje que se envía al agente al hacer clic |
+
+Las pastillas SHALL registrarse con `useConfigureSuggestions` (`available: "before-first-message"`). Al elegir una, el chat MUST enviar `message` como primer turno.
+
+Valores por defecto (cubren FR 1–4; las tres últimas, `SPEC-A2UI-001`):
+
+| `title` | `message` |
+| --- | --- |
+| `Resume el perfil profesional` | `Resume el perfil profesional de Alejandro: roles que busca, fortalezas e intereses.` |
+| `¿Qué experiencia tiene en IA?` | `¿Qué experiencia tiene Alejandro con inteligencia artificial generativa? Incluye empresas, responsabilidades y logros.` |
+| `¿Cuáles son sus habilidades técnicas?` | `¿Cuáles son las habilidades técnicas más relevantes de Alejandro y en qué experiencia o proyecto las aplicó?` |
+| `Cuéntame de los proyectos` | `Cuéntame de los proyectos destacados: problema que resolvían, rol de Alejandro y resultados.` |
+| `Radar de habilidades` | `Muéstrame un gráfico radar con las habilidades técnicas de Alejandro y su nivel.` |
+| `Línea de tiempo` | `Muéstrame la trayectoria profesional de Alejandro en una línea de tiempo, del rol más reciente al más antiguo.` |
+| `¿Qué es Chequemotiva?` | `Cuéntame más sobre Chequemotiva, una de las empresas en las que colaboró Alejandro.` |
+
+Las tres últimas pastillas cubren A2UI y la tool de empresas (`SPEC-A2UI-001`). El árbol SHALL envolver la app en `CopilotProvider` (catálogo A2UI) en lugar de `CopilotKit` directo.
+
 ## 11. Requisitos no funcionales
 
 | ID | Requisito |
@@ -222,6 +249,7 @@ El chat MUST NOT pedir `INTERNAL_API_KEY`. Las respuestas siguen el prompt del p
 | Paleta cerrada de 15 | Color picker libre | Evita acentos ilegibles y mantiene look de marca. |
 | CopilotKit a la derecha, no overlay | Modal flotante | El CV y el chat se evalúan juntos. |
 | Preview fijo en perfil `cloud` | Switcher de perfiles en UI | El chat da la bienvenida a ese perfil; los demás se exponen por API (`SPEC-OR-001`). |
+| Suggestions estáticas en data | Generarlas con el LLM o hardcodearlas en el JSX | Se editan en un solo archivo; el primer mensaje es predecible para la demo. |
 
 ## 13. Criterios de aceptación
 
@@ -235,12 +263,13 @@ El chat MUST NOT pedir `INTERNAL_API_KEY`. Las respuestas siguen el prompt del p
 - [ ] Durante la generación el botón muestra `GENERANDO…` y está deshabilitado.
 - [ ] El PDF no incluye la toolbar.
 - [ ] El chat muestra el welcome en español y responde sobre el perfil Cloud sin API key en el cliente.
+- [ ] El estado vacío muestra las pastillas de `src/data/chat-suggestions.ts` (perfil, A2UI y Chequemotiva). Clic envía `message`.
 
 ## 14. Trazabilidad
 
 | Requisito | Implementación |
 | --- | --- |
-| RF-UI-01 | `src/app/page.tsx`, `src/app/layout.tsx` |
+| RF-UI-01 | `src/app/page.tsx`, `src/app/layout.tsx`, `src/components/copilot-provider.tsx` |
 | RF-UI-02 | `src/components/cv/cv-panel.tsx`, `src/components/agent-panel.tsx` |
 | RF-UI-03, RNF-UI-03 | `src/components/cv/cv-panel.tsx`, `src/app/globals.css` |
 | RF-UI-04 | `src/app/layout.tsx`, `src/app/globals.css` |
@@ -250,4 +279,5 @@ El chat MUST NOT pedir `INTERNAL_API_KEY`. Las respuestas siguen el prompt del p
 | RF-UI-08 … RF-UI-10 | `src/components/cv/cv-accent-picker.tsx`, `src/lib/accent.ts` |
 | RF-UI-11, RF-UI-12 | `src/components/cv/cv-download-button.tsx`, `src/lib/use-pdf-download.ts` |
 | RF-UI-13 | `src/components/agent-panel.tsx` |
+| RF-UI-14 | `src/data/chat-suggestions.ts`, `src/components/agent-panel.tsx` |
 | Referencia visual | `.cursor/specs/copilot-ui/curriculum-example.pdf` |
