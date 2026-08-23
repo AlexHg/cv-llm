@@ -18,7 +18,7 @@ build/
 .gitattributes
 .vscode/
 .idea/
-.docs/
+.cursor/
 *.md
 AGENTS.md
 CLAUDE.md
