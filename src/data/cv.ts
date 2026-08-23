@@ -131,7 +131,8 @@ export const cvBase: CvBase = {
       id: "ebc-techlead",
       title: "Jefe de Soluciones de IA",
       company: "Escuela Bancaria y Comercial",
-      period: "Mar 2026 – Jun 2026",
+      start: { year: 2026, month: 3 },
+      end: { year: 2026, month: 6 },
       page: 1,
       description:
         "Como Jefe de Soluciones de IA, diseñé y lideré aplicaciones de inteligencia artificial serverless en AWS, definiendo la estrategia técnica, la arquitectura y la entrega continua. Construí sistemas basados en RAG y pipelines de entrenamiento de sistemas inteligentes, exponiendo capacidades a través de API Gateway y servicios serverless escalables para llevar soluciones de IA a producción.",
@@ -151,7 +152,8 @@ export const cvBase: CvBase = {
       id: "chequemotiva-techlead",
       title: "Tech Lead",
       company: "Chequemotiva",
-      period: "Jul 2024 – Mar 2026",
+      start: { year: 2024, month: 7 },
+      end: { year: 2026, month: 3 },
       page: 1,
       description:
         "Lideré la arquitectura y la mejora continua de la plataforma SaaS principal de la empresa, garantizando escalabilidad y alta disponibilidad. Dirijo la estrategia técnica y la entrega de funcionalidades listas para la nube. Diseñé soluciones cloud desacopladas usando tecnologías como Redis, Memcache, Aurora, ECS, entre otras. También lideré un sistema de OCR/validación de facturas y una plataforma de tarjetas prepago bajo demanda, integrando automatización y confiabilidad en el ecosistema.",
@@ -172,7 +174,8 @@ export const cvBase: CvBase = {
       id: "cerocatorce-techlead",
       title: "Tech Lead - Dev & Cloud",
       company: "Cerocatorce",
-      period: "May 2022 – Jul 2024",
+      start: { year: 2022, month: 5 },
+      end: { year: 2024, month: 7 },
       page: 1,
       description:
         "Tras ser promovido a Tech Lead, lideré un equipo de cuatro desarrolladores, supervisando la calidad del código, resolviendo problemas técnicos y coordinando con project managers los tiempos de entrega. También participé en reuniones de liderazgo técnico para planificar nuevos proyectos, integraciones y mejoras de infraestructura.",
@@ -192,7 +195,8 @@ export const cvBase: CvBase = {
       id: "cerocatorce-devops",
       title: "DevOps y Desarrollador Full Stack",
       company: "Cerocatorce",
-      period: "Jun 2019 – May 2022",
+      start: { year: 2019, month: 6 },
+      end: { year: 2022, month: 5 },
       page: 2,
       description:
         "Como miembro inicial del equipo digital, diseñé e implementé la infraestructura de software y cloud principal. Construí integraciones con proveedores de gift cards, reforcé la seguridad del sistema y conecté sistemas con AWS, Twilio y Sendinblue — sentando las bases de productos SaaS escalables.",
@@ -212,7 +216,8 @@ export const cvBase: CvBase = {
       id: "welfare-fullstack",
       title: "Desarrollador Full Stack",
       company: "Welfare",
-      period: "Ene 2015 – Jun 2019",
+      start: { year: 2015, month: 1 },
+      end: { year: 2019, month: 6 },
       page: 2,
       description:
         "En Welfare lideré la tecnología y el desarrollo de software de la empresa, colaborando con equipos comerciales y de operaciones. Trabajé con múltiples ONG para construir sitios institucionales, plantillas WordPress a medida y plataformas de donaciones, desarrollando pasarelas de pago desde cero y dando soporte a sistemas existentes.",
@@ -234,7 +239,8 @@ export const cvBase: CvBase = {
   education: {
     degree: "Ingeniería en\nSistemas Computacionales",
     school: "Instituto Politécnico Nacional",
-    period: "2014 – 2019",
+    start: { year: 2014 },
+    end: { year: 2019 },
   },
   expertise: expertiseItems,
   skills: [
@@ -444,6 +450,8 @@ export const cvBase: CvBase = {
       id: "dti-cloud",
       title: "DTI Cloud",
       meta: "(2021) – Canadá",
+      start: { year: 2021 },
+      end: { year: 2021 },
       description:
         "Lideré la migración de sistemas internos de la empresa desde servidores dedicados a AWS, incluyendo autoescalado y bases de datos gestionadas – <i>Diesel Tech Industries como consultoría independiente (Canadá)</i>",
       keywords: "AWS, Elastic Beanstalk, SQS, Auto-scaling, RDS Databases",
@@ -464,6 +472,8 @@ export const cvBase: CvBase = {
       id: "incentive-machine",
       title: "Incentive Machine",
       meta: "(2021) – México",
+      start: { year: 2021 },
+      end: { year: 2021 },
       description:
         "Lideré una plataforma SaaS multitenant para la distribución de cupones y gift cards a usuarios finales y empresas de marketing, con múltiples servicios de distribución – <i>Cerocatorce (México)</i>",
       keywords:
@@ -485,6 +495,8 @@ export const cvBase: CvBase = {
       id: "nuclear-hub",
       title: "Nuclear Builders / SaaS Hub",
       meta: "(2022–2025) – México – Proyecto personal",
+      start: { year: 2022 },
+      end: { year: 2025 },
       description:
         "Desarrollé una plataforma SaaS no-code multitenant que genera aplicaciones personalizables, reutilizando la misma infraestructura por cada servicio que crea – <i>Proyecto independiente</i>",
       keywords:
@@ -506,6 +518,8 @@ export const cvBase: CvBase = {
       id: "joifilabs",
       title: "Joifilabs Middleware & Backoffice",
       meta: "(2025) – España",
+      start: { year: 2025 },
+      end: { year: 2025 },
       description:
         "Lideré el desarrollo de un middleware centralizado entre sistemas a bordo de trenes europeos e infraestructura en tierra, habilitando comunicación en tiempo real, sincronización de datos y APIs seguras entre flotas – <i>Joifilabs (España) – Independiente (Nuclear)</i>",
       keywords:
@@ -527,6 +541,8 @@ export const cvBase: CvBase = {
       id: "billprotech",
       title: "BillProTech – Invoice Verification",
       meta: "(2024–2025) – México – Proyecto personal",
+      start: { year: 2024 },
+      end: { year: 2025 },
       description:
         "Construí un sistema de procesamiento inteligente de documentos (OCR) y validación de datos financieros para extraer y verificar información de facturas, recibos y cotizaciones con Python, modelos OpenAI y técnicas de detección de fraude – <i>Proyecto independiente</i>",
       keywords:
@@ -548,6 +564,8 @@ export const cvBase: CvBase = {
       id: "anahuac",
       title: "Anahuac COAD",
       meta: "(2023–2025) – México",
+      start: { year: 2023 },
+      end: { year: 2025 },
       description:
         "Lideré la plataforma de gestión y automatización de acreditaciones académicas en la Universidad Anáhuac Puebla, incluyendo asignación de tareas, generación de documentos, flujos colaborativos y seguimiento de autoestudios y recomendaciones – <i>Independiente (Nuclear)</i>",
       keywords: "NestJS (Node.js), MongoDB/CosmosDB, Nuxt (Vue), Azure",
@@ -567,6 +585,8 @@ export const cvBase: CvBase = {
       id: "issste",
       title: "ISSSTE Data Warehouse",
       meta: "(2021–2022) – México",
+      start: { year: 2021 },
+      end: { year: 2022 },
       description:
         "Lideré un data warehouse para un proveedor de medicamentos del ISSSTE que recopila transacciones de SAP, proveedores de datos y bases de datos para alimentar dashboards en Google Data Studio y Looker – <i>Gavide como consultoría independiente (México)</i>",
       keywords:
@@ -588,6 +608,8 @@ export const cvBase: CvBase = {
       id: "predictify",
       title: "Predictify Genomic Analysis",
       meta: "(2024) – España",
+      start: { year: 2024 },
+      end: { year: 2024 },
       description:
         "Lideré el desarrollo frontend de una plataforma científica para carga, filtrado, clasificación de datos y generación de reportes mediante un flujo interactivo y colaborativo – <i>Predictify (España) – Independiente (Nuclear)</i>",
       keywords: "MongoDB, Nuxt (Vue), AWS, Charts, Data visualization",
@@ -607,6 +629,8 @@ export const cvBase: CvBase = {
       id: "lexic",
       title: "Lexic.ai",
       meta: "(2020) – España",
+      start: { year: 2020 },
+      end: { year: 2020 },
       description:
         "Lideré una plataforma SaaS pay-as-you-go que permite a las empresas consumir servicios de Lexical AI como análisis de emociones, detección de palabras clave y categorización de entidades – <i>Lexic.ai (España)</i>",
       keywords: "Loopback, Express, MongoDB, Vue.js, AWS, Multitenancy",

@@ -35,6 +35,8 @@ El chat ya responde en texto. Para habilidades y trayectoria conviene una UI dec
 
 El runtime SHALL activar el middleware A2UI y **no** inyectar `generate_a2ui` (`a2ui: { injectA2UITool: false, agents: ["default"] }`). BuiltInAgent no completa ese subagente y el chat se queda en “Building interface”.
 
+`BuiltInAgent` MUST declarar `maxSteps` > 1. Radar/timeline se ven igual con 1 paso (la tool pinta la superficie), pero `lookup_company` y `query_profile` necesitan un segundo paso de texto. Sin eso el primer turno queda en blanco. Ver `SPEC-CV-003`.
+
 Las superficies salen de tools propias que devuelven `{ a2ui_operations: [...] }`:
 
 | Tool | Superficie |
@@ -78,6 +80,7 @@ Para trayectoria laboral, cada ítem MUST mapear un empleo: `title` = puesto, `s
 | `Radar de habilidades` | `Muéstrame un gráfico radar con las habilidades técnicas de Alejandro y su nivel.` |
 | `Línea de tiempo` | `Muéstrame la trayectoria profesional de Alejandro en una línea de tiempo, del rol más reciente al más antiguo.` |
 | `¿Qué es Chequemotiva?` | `Cuéntame más sobre Chequemotiva, una de las empresas en las que colaboró Alejandro.` |
+| `¿Dónde ha durado más?` | Distingue permanencia por empresa y el rol individual más largo (`SPEC-CV-003`). |
 | `Cambia el color a azul` | `Cambia el color de acento del CV a azul.` (`SPEC-UI-001` RF-UI-15) |
 
 La pastilla de Chequemotiva nombra una empresa a propósito: es el camino de demo de la tool.
@@ -96,7 +99,8 @@ Las fichas viven en `src/data/companies.ts`. Cada ficha:
 | `country`, `sector` | Contexto público |
 | `summary` | Hechos públicos de la organización, no del candidato |
 | `website` | Opcional |
-| `collaboration` | Roles, periodos e IDs de experience/project del CV |
+| `collaboration` | Roles e IDs de experience/project. Periodo y duración se derivan |
+| `group`, `relatedSlugs` | Empleadores o clientes distintos (p. ej. Grupo 014). No fusionar permanencia |
 
 El prompt del agente MUST listar solo nombres y aliases, no el `summary`.
 
@@ -124,9 +128,9 @@ La tool MUST:
 El prompt SHALL ordenar:
 
 1. Llamar `lookup_company` **solo** si el usuario pregunta de forma explícita por una empresa u organización concreta (nombre o alias: “qué es X”, “háblame de X”, “en qué consiste X”).
-2. **No** llamarla al listar experiencia, comparar roles, explicar skills o proyectos, ni ante “¿dónde ha trabajado?”.
+2. **No** llamarla al listar experiencia, comparar roles, explicar skills o proyectos, ni ante “¿dónde ha trabajado?”, duraciones o “¿dónde duró más?”. Eso es `query_profile` (`SPEC-CV-003`).
 3. Si no hay ficha, decirlo y no rellenar el hueco.
-4. Tras un hit, citar `company:<slug>` y no contradecir el CV.
+4. Tras un hit, citar `company:<slug>` y no contradecir el CV ni la permanencia derivada.
 
 ## 7. Criterios de aceptación
 

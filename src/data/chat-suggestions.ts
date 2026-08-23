@@ -49,6 +49,11 @@ export const chatSuggestions: ChatSuggestion[] = [
       "Cuéntame más sobre Chequemotiva, una de las empresas en las que colaboró Alejandro.",
   },
   {
+    title: "¿Dónde ha durado más?",
+    message:
+      "¿En qué empresa ha durado más tiempo Alejandro? Distingue permanencia por empresa y el rol individual más largo.",
+  },
+  {
     title: "Cambia el color a azul",
     message: "Cambia el color de acento del CV a azul.",
   },

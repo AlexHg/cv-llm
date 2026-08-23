@@ -3,6 +3,7 @@ import {
   showSkillsRadarTool,
 } from "@/lib/a2ui-tools";
 import { lookupCompanyTool } from "@/lib/company-tool";
+import { queryProfileTool } from "@/lib/query-profile-tool";
 import { cvToAgentPrompt } from "@/lib/cv-prompt";
 import { resolveCv } from "@/data/resolve-cv";
 import { createOpenResponsesModel } from "@/lib/open-responses";
@@ -18,7 +19,15 @@ const cv = resolveCv("cloud");
 const builtInAgent = new BuiltInAgent({
   model: createOpenResponsesModel(),
   prompt: cvToAgentPrompt(cv),
-  tools: [lookupCompanyTool, showSkillsRadarTool, showCareerTimelineTool],
+  // El default del AI SDK es 1 paso: si el primer turno solo llama una tool
+  // (query_profile, lookup_company) el run termina sin texto y el chat queda vacío.
+  maxSteps: 8,
+  tools: [
+    queryProfileTool,
+    lookupCompanyTool,
+    showSkillsRadarTool,
+    showCareerTimelineTool,
+  ],
 });
 
 const runtime = new CopilotRuntime({

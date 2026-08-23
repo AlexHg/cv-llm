@@ -1,6 +1,5 @@
 export interface CompanyCollaboration {
   roles: string[];
-  periods: string[];
   experienceIds: string[];
   projectIds: string[];
 }
@@ -13,6 +12,8 @@ export interface CompanyProfile {
   sector: string;
   summary: string;
   website?: string;
+  group?: string;
+  relatedSlugs?: string[];
   collaboration: CompanyCollaboration;
 }
 
@@ -28,7 +29,6 @@ export const companies: CompanyProfile[] = [
     website: "https://www.ebc.mx",
     collaboration: {
       roles: ["Jefe de Soluciones de IA"],
-      periods: ["Mar 2026 – Jun 2026"],
       experienceIds: ["ebc-techlead"],
       projectIds: [],
     },
@@ -47,9 +47,10 @@ export const companies: CompanyProfile[] = [
     summary:
       "Empresa de incentivos, fidelización y marketing promocional para compañías (también conocida como CQM Rewards). Opera plataformas de recompensas, catálogos de tarjetas regalo y programas de lealtad; forma parte del ecosistema del Grupo 014.",
     website: "https://www.chequemotiva.com/home/",
+    group: "Grupo 014",
+    relatedSlugs: ["cerocatorce"],
     collaboration: {
       roles: ["Tech Lead"],
-      periods: ["Jul 2024 – Mar 2026"],
       experienceIds: ["chequemotiva-techlead"],
       projectIds: [],
     },
@@ -67,9 +68,10 @@ export const companies: CompanyProfile[] = [
     sector: "Engagement, lealtad e incentivos",
     summary:
       "Compañía de estrategias de engagement, campañas promocionales y programas de lealtad para empresas en Latinoamérica. Pertenece al Grupo 014, el mismo ecosistema que Chequemotiva / CQM Rewards.",
+    group: "Grupo 014",
+    relatedSlugs: ["chequemotiva"],
     collaboration: {
       roles: ["Tech Lead - Dev & Cloud", "DevOps y Desarrollador Full Stack"],
-      periods: ["Jun 2019 – Jul 2024"],
       experienceIds: ["cerocatorce-techlead", "cerocatorce-devops"],
       projectIds: ["incentive-machine"],
     },
@@ -84,7 +86,6 @@ export const companies: CompanyProfile[] = [
       "Agencia mexicana enfocada en las organizaciones de la sociedad civil. Alejandro lideró el desarrollo de software: sitios institucionales, plantillas WordPress y plataformas de donaciones.",
     collaboration: {
       roles: ["Desarrollador Full Stack"],
-      periods: ["Ene 2015 – Jun 2019"],
       experienceIds: ["welfare-fullstack"],
       projectIds: [],
     },
@@ -99,7 +100,6 @@ export const companies: CompanyProfile[] = [
       "Empresa canadiense de componentes y soluciones para motores diésel. La colaboración fue como consultoría independiente para migrar sistemas internos a AWS.",
     collaboration: {
       roles: ["Consultoría independiente — migración cloud"],
-      periods: ["2021"],
       experienceIds: [],
       projectIds: ["dti-cloud"],
     },
@@ -112,9 +112,9 @@ export const companies: CompanyProfile[] = [
     sector: "Tecnología ferroviaria",
     summary:
       "Empresa española que trabaja con sistemas a bordo de trenes europeos e infraestructura en tierra. La colaboración cubrió un middleware de comunicación en tiempo real y un backoffice.",
+    relatedSlugs: ["nuclear"],
     collaboration: {
       roles: ["Liderazgo de middleware y backoffice (independiente / Nuclear)"],
-      periods: ["2025"],
       experienceIds: [],
       projectIds: ["joifilabs"],
     },
@@ -136,9 +136,9 @@ export const companies: CompanyProfile[] = [
     summary:
       "Universidad privada en Puebla, parte de la Red de Universidades Anáhuac. El proyecto COAD cubrió gestión y automatización de acreditaciones académicas.",
     website: "https://www.anahuac.mx/puebla",
+    relatedSlugs: ["nuclear"],
     collaboration: {
       roles: ["Liderazgo de la plataforma de acreditaciones (independiente / Nuclear)"],
-      periods: ["2023–2025"],
       experienceIds: [],
       projectIds: ["anahuac"],
     },
@@ -155,9 +155,9 @@ export const companies: CompanyProfile[] = [
     summary:
       "Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado: organismo público mexicano de salud y prestaciones para trabajadores al servicio del Estado.",
     website: "https://www.gob.mx/issste",
+    relatedSlugs: ["gavide"],
     collaboration: {
       roles: ["Data warehouse para un proveedor de medicamentos del ISSSTE"],
-      periods: ["2021–2022"],
       experienceIds: [],
       projectIds: ["issste"],
     },
@@ -171,9 +171,9 @@ export const companies: CompanyProfile[] = [
     summary:
       "Empresa dedicada a la implementación de soluciones empresariales basadas en SAP. La colaboración cubrió el data warehouse de un proveedor de medicamentos del ISSSTE (dashboards en Google Data Studio y Looker).",
     website: "https://gavide.com/",
+    relatedSlugs: ["issste"],
     collaboration: {
       roles: ["Consultoría independiente — data warehouse"],
-      periods: ["2021–2022"],
       experienceIds: [],
       projectIds: ["issste"],
     },
@@ -186,9 +186,9 @@ export const companies: CompanyProfile[] = [
     sector: "Biotecnología / análisis genómico",
     summary:
       "Plataforma científica para carga, filtrado y reporte de datos genómicos. La colaboración fue el frontend (independiente / Nuclear).",
+    relatedSlugs: ["nuclear"],
     collaboration: {
       roles: ["Liderazgo de desarrollo frontend"],
-      periods: ["2024"],
       experienceIds: [],
       projectIds: ["predictify"],
     },
@@ -203,7 +203,6 @@ export const companies: CompanyProfile[] = [
       "Plataforma SaaS pay-as-you-go de Lexical AI: análisis de emociones, detección de palabras clave y categorización de entidades para empresas.",
     collaboration: {
       roles: ["Liderazgo de la plataforma SaaS"],
-      periods: ["2020"],
       experienceIds: [],
       projectIds: ["lexic"],
     },
@@ -216,9 +215,9 @@ export const companies: CompanyProfile[] = [
     sector: "Estudio independiente / SaaS",
     summary:
       "Estudio independiente de Alejandro para proyectos SaaS y consultoría. Incluye el hub no-code multitenant y entregas para Anáhuac, Joifilabs y Predictify.",
+    relatedSlugs: ["anahuac-puebla", "joifilabs", "predictify"],
     collaboration: {
       roles: ["Fundador / desarrollador"],
-      periods: ["2022–2025"],
       experienceIds: [],
       projectIds: ["nuclear-hub", "anahuac", "joifilabs", "predictify"],
     },
@@ -234,5 +233,10 @@ export function listCompanyDirectory() {
     slug: company.slug,
     name: company.name,
     aliases: company.aliases,
+    group: company.group,
+    related: (company.relatedSlugs ?? []).map((slug) => {
+      const related = companies.find((item) => item.slug === slug);
+      return { slug, name: related?.name ?? slug };
+    }),
   }));
 }

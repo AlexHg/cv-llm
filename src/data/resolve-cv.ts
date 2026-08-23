@@ -16,6 +16,12 @@ import type {
   ProfileId,
 } from "./types";
 import { DEFAULT_PROFILE, isCvBlockId, isProfileId } from "./types";
+import {
+  hydrateEducation,
+  hydrateExperience,
+  hydrateProject,
+} from "@/lib/cv-hydrate";
+import { buildCompanyTenures, pickHighlights } from "@/lib/cv-tenure";
 
 export function parseProfile(value: unknown): ProfileId {
   return isProfileId(value) ? value : DEFAULT_PROFILE;
@@ -56,11 +62,19 @@ export function getContact(): CvContactBlock {
 }
 
 export function getExperience(): CvExperienceBlock {
-  return { items: cvBase.experience };
+  const items = cvBase.experience.map(hydrateExperience);
+  const projects = cvBase.sideProjects.map(hydrateProject);
+  const byCompany = buildCompanyTenures(items, projects);
+
+  return {
+    items,
+    byCompany,
+    highlights: pickHighlights(items, byCompany),
+  };
 }
 
 export function getEducation(): CvEducation {
-  return { ...cvBase.education };
+  return hydrateEducation(cvBase.education);
 }
 
 export function getExpertise(): CvExpertiseBlock {
@@ -72,7 +86,7 @@ export function getSkills(): CvSkillsBlock {
 }
 
 export function getProjects(): CvProjectsBlock {
-  return { items: cvBase.sideProjects };
+  return { items: cvBase.sideProjects.map(hydrateProject) };
 }
 
 export function getCompetencies(): CvCompetenciesBlock {
@@ -113,9 +127,9 @@ export function getCvBlock(block: CvBlockId) {
 
 export function resolveCv(profile: ProfileId = DEFAULT_PROFILE): CvData {
   const identity = getIdentity();
-  const experience = getExperience().items;
+  const experience = getExperience();
   const byPage = (page: 1 | 2): CvExperience[] =>
-    experience.filter((job) => job.page === page);
+    experience.items.filter((job) => job.page === page);
 
   return {
     firstName: identity.firstName,
@@ -126,6 +140,8 @@ export function resolveCv(profile: ProfileId = DEFAULT_PROFILE): CvData {
     contact: getContact().items,
     experiencePage1: byPage(1),
     experiencePage2: byPage(2),
+    tenures: experience.byCompany,
+    highlights: experience.highlights,
     education: getEducation(),
     expertise: getExpertise().items.map((item) => item.name),
     skills: getSkills().items,

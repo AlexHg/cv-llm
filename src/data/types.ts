@@ -40,10 +40,23 @@ export type CompetencyId =
 
 export type CvSourceKind = "experience" | "project";
 
+export interface CvDate {
+  year: number;
+  month?: number;
+}
+
 export interface CvSourceRef {
   kind: CvSourceKind;
   id: string;
   how: string;
+}
+
+export interface CvTemporalSpan {
+  start: CvDate;
+  end: CvDate;
+  period: string;
+  durationMonths: number;
+  durationLabel: string;
 }
 
 export interface CvContact {
@@ -56,7 +69,11 @@ export interface CvExperience {
   id: string;
   title: string;
   company: string;
+  start: CvDate;
+  end: CvDate;
   period: string;
+  durationMonths: number;
+  durationLabel: string;
   description: string;
   page: 1 | 2;
   responsibilities: string[];
@@ -65,11 +82,20 @@ export interface CvExperience {
   focuses: ExperienceFocus[];
 }
 
+export type CvExperienceSource = Omit<
+  CvExperience,
+  "period" | "durationMonths" | "durationLabel"
+>;
+
 export interface CvEducation {
   degree: string;
   school: string;
+  start: CvDate;
+  end: CvDate;
   period: string;
 }
+
+export type CvEducationSource = Omit<CvEducation, "period">;
 
 export interface CvSkill {
   name: string;
@@ -81,6 +107,10 @@ export interface CvSideProject {
   id: string;
   title: string;
   meta: string;
+  start: CvDate;
+  end: CvDate;
+  durationMonths: number;
+  durationLabel: string;
   description: string;
   keywords: string;
   problem: string;
@@ -90,6 +120,11 @@ export interface CvSideProject {
   results: string[];
   learnings: string[];
 }
+
+export type CvSideProjectSource = Omit<
+  CvSideProject,
+  "durationMonths" | "durationLabel"
+>;
 
 export interface CvCompetency {
   id: CompetencyId;
@@ -140,8 +175,46 @@ export interface CvContactBlock {
   items: CvContact[];
 }
 
+export interface CompanyTenureRole {
+  id: string;
+  title: string;
+  period: string;
+  durationMonths: number;
+  durationLabel: string;
+}
+
+export interface RelatedCompanyRef {
+  slug: string;
+  name: string;
+  group?: string;
+}
+
+export interface CompanyTenure extends CvTemporalSpan {
+  slug?: string;
+  name: string;
+  kind: "employment" | "project";
+  roles: CompanyTenureRole[];
+  projectIds: string[];
+  group?: string;
+  related: RelatedCompanyRef[];
+}
+
+export interface ExperienceHighlights {
+  longestCompany: CompanyTenure | null;
+  longestRole: {
+    id: string;
+    title: string;
+    company: string;
+    period: string;
+    durationMonths: number;
+    durationLabel: string;
+  } | null;
+}
+
 export interface CvExperienceBlock {
   items: CvExperience[];
+  byCompany: CompanyTenure[];
+  highlights: ExperienceHighlights;
 }
 
 export interface CvExpertiseItem {
@@ -179,6 +252,8 @@ export interface CvData {
   contact: CvContact[];
   experiencePage1: CvExperience[];
   experiencePage2: CvExperience[];
+  tenures: CompanyTenure[];
+  highlights: ExperienceHighlights;
   education: CvEducation;
   expertise: string[];
   skills: CvSkill[];
@@ -206,11 +281,11 @@ export interface CvBase {
     type: CvContact["type"];
     value: string;
   }[];
-  experience: CvExperience[];
-  education: CvEducation;
+  experience: CvExperienceSource[];
+  education: CvEducationSource;
   expertise: CvExpertiseItem[];
   skills: CvSkill[];
-  sideProjects: CvSideProject[];
+  sideProjects: CvSideProjectSource[];
   competencies: CvCompetency[];
 }
 

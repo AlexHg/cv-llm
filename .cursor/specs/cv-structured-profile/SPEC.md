@@ -73,10 +73,15 @@ Cada ítem de `experience` SHALL añadir:
 | `achievements` | `string[]` | Logros / resultados declarados |
 | `technologies` | `string[]` | Stack citado en ese rol |
 | `focuses` | `ExperienceFocus[]` | `technical` \| `leadership` \| `genai` \| `business` |
+| `start`, `end` | `CvDate` | Año y mes opcionales. Fuente de `period` y duración |
+| `period` | string | Derivado. Mismo formato de impresión que el PDF |
+| `durationMonths`, `durationLabel` | number, string | Derivados. El agente MUST copiarlos, no restar fechas |
 
 Cita: `experience:<id>`.
 
 `technologies` MUST salir del texto o keywords ya existentes de ese rol. Si el párrafo no nombra stack, el arreglo queda vacío.
+
+El bloque `GET /api/cv/experience` SHALL incluir `items`, `byCompany` (permanencia agregada) y `highlights` (`longestCompany` laboral, `longestRole`). Ver `SPEC-CV-003`.
 
 ### RF-CV-03 — Skills (FR 3)
 
@@ -115,6 +120,8 @@ Cada proyecto SHALL añadir:
 | `challenges` | `string[]` |
 | `results` | `string[]` |
 | `learnings` | `string[]` |
+| `start`, `end` | `CvDate` | Año (mes opcional) del encargo |
+| `durationMonths`, `durationLabel` | number, string | Derivados |
 
 Cita: `project:<id>`.
 
@@ -138,6 +145,7 @@ El prompt SHALL:
 - Tratar arreglos vacíos como “no consta en el perfil”.
 - Prohibir inventar certificaciones, empleos, logros o tecnologías.
 - Limitar el alcance al perfil y lo relacionado con él (FR 12). Fuera de tema: no responder el contenido, no llamar tools, disculparse y redirigir.
+- Inyectar duraciones precalculadas y permanencia por empresa. Prohibir que el modelo reste fechas o fusione empleadores relacionados (`SPEC-CV-003`).
 
 ## 7. Criterios de aceptación
 

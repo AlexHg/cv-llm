@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { listCompanyNames } from "@/data/companies";
 import { unauthorizedResponse } from "@/lib/internal-auth";
 import { getCompanyBySlug } from "@/lib/lookup-company";
+import { resolveCompanyProfile } from "@/lib/resolve-company";
 
 export async function GET(
   request: NextRequest,
@@ -23,5 +24,5 @@ export async function GET(
     );
   }
 
-  return Response.json({ company });
+  return Response.json({ company: resolveCompanyProfile(company) });
 }
