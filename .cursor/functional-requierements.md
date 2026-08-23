@@ -121,7 +121,24 @@ Preguntas de seguimiento.
 Información inexistente en el CV.
 Solicitudes ambiguas.
 Intentos de obtener información no autorizada.
+Preguntas fuera de alcance (off-topic).
 Puedes incorporar evaluación, observabilidad, guardrails o sistemas agénticos si tienen sentido para tu diseño; no son requisitos obligatorios, pero pueden fortalecer tu demostración técnica.
+
+12. Limitar el alcance al perfil 🎯
+El agente SHALL responder solo preguntas sobre el perfil profesional del candidato y lo relacionado con él:
+
+Identidad, roles, fortalezas, intereses y formación.
+Experiencia laboral y empresas en las que colaboró.
+Habilidades, competencias y proyectos.
+Encaje para un rol, resúmenes e introducción para entrevista.
+Visuales del CV (radar, línea de tiempo) y el color de acento del documento.
+
+Si el pedido está fuera de ese alcance, el agente MUST:
+
+No responder el contenido fuera de tema ni llamar tools.
+Disculparse y redirigir al perfil, con un mensaje del tipo:
+«Lo siento, soy un agente especializado en el perfil profesional de Alejandro. No puedo ayudarte con eso.»
+Si el mensaje mezcla un tema del perfil con uno ajeno, responder solo la parte del perfil.
 
 Flujo funcional mínimo recomendado 🚀
 El usuario pregunta por el perfil del candidato.

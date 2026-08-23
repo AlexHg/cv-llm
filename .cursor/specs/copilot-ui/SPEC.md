@@ -160,6 +160,15 @@ Elegir un color SHALL escribir `--cv-accent` en `:root`. Todo `bg-mustard` / `te
 
 El acento SHALL guardarse en `localStorage` bajo `cv-accent`. Al recargar, si el valor está en la paleta, se restaura; si no, default.
 
+### RF-UI-15 — Cambio de color por el chat
+
+El agente SHALL poder cambiar el acento con la frontend tool `set_accent_color`.
+
+- El estado vive en `AccentProvider` (mismo `--cv-accent` y `localStorage` que el botón Color).
+- El parámetro `color` MAY ser un nombre (es/en) o un hex de la paleta.
+- Si no hay coincidencia, la tool MUST devolver `ok: false` y la lista de nombres; el agente no inventa un color.
+- La pastilla de ejemplo `Cambia el color a azul` envía un pedido explícito, sin mencionar tools.
+
 ## 9. Botón de descarga
 
 ### RF-UI-11 — Control
@@ -200,7 +209,7 @@ Labels en español:
 | `welcomeMessageText` | `Hola. Pregúntame por el perfil Cloud de Alejandro cuando quieras.` |
 | `chatInputPlaceholder` | `Escribe tu pregunta...` |
 
-El chat MUST NOT pedir `INTERNAL_API_KEY`. Las respuestas siguen el prompt del perfil Cloud (`SPEC-OR-001` RF-OR-12).
+El chat MUST NOT pedir `INTERNAL_API_KEY`. Las respuestas siguen el prompt del perfil Cloud (`SPEC-OR-001` RF-OR-12). Preguntas ajenas al perfil MUST disculparse y redirigir (FR 12).
 
 ### RF-UI-14 — Preguntas de ejemplo
 
@@ -226,8 +235,9 @@ Valores por defecto (cubren FR 1–4; las tres últimas, `SPEC-A2UI-001`):
 | `Radar de habilidades` | `Muéstrame un gráfico radar con las habilidades técnicas de Alejandro y su nivel.` |
 | `Línea de tiempo` | `Muéstrame la trayectoria profesional de Alejandro en una línea de tiempo, del rol más reciente al más antiguo.` |
 | `¿Qué es Chequemotiva?` | `Cuéntame más sobre Chequemotiva, una de las empresas en las que colaboró Alejandro.` |
+| `Cambia el color a azul` | `Cambia el color de acento del CV a azul.` |
 
-Las tres últimas pastillas cubren A2UI y la tool de empresas (`SPEC-A2UI-001`). El árbol SHALL envolver la app en `CopilotProvider` (catálogo A2UI) en lugar de `CopilotKit` directo.
+Las pastillas extra cubren A2UI, empresas (`SPEC-A2UI-001`) y el cambio de acento (RF-UI-15). El árbol SHALL envolver la app en `CopilotProvider` (catálogo A2UI) en lugar de `CopilotKit` directo.
 
 ## 11. Requisitos no funcionales
 
@@ -263,7 +273,9 @@ Las tres últimas pastillas cubren A2UI y la tool de empresas (`SPEC-A2UI-001`).
 - [ ] Durante la generación el botón muestra `GENERANDO…` y está deshabilitado.
 - [ ] El PDF no incluye la toolbar.
 - [ ] El chat muestra el welcome en español y responde sobre el perfil Cloud sin API key en el cliente.
-- [ ] El estado vacío muestra las pastillas de `src/data/chat-suggestions.ts` (perfil, A2UI y Chequemotiva). Clic envía `message`.
+- [ ] Una pregunta ajena al perfil recibe una disculpa y redirige al CV (FR 12).
+- [ ] El estado vacío muestra las pastillas de `src/data/chat-suggestions.ts` (perfil, A2UI, Chequemotiva y color). Clic envía `message`.
+- [ ] Pedir “cambia el color a azul” actualiza el acento del CV y persiste en `cv-accent`.
 
 ## 14. Trazabilidad
 
@@ -276,7 +288,7 @@ Las tres últimas pastillas cubren A2UI y la tool de empresas (`SPEC-A2UI-001`).
 | RF-UI-05 | `src/components/cv/cv-page-one.tsx`, `cv-contact-card.tsx`, `cv-experience-item.tsx` |
 | RF-UI-06 | `src/components/cv/cv-page-two.tsx`, `cv-skill-bar.tsx`, `cv-side-project.tsx` |
 | RF-UI-07 | `src/app/page.tsx`, `src/data/resolve-cv.ts` |
-| RF-UI-08 … RF-UI-10 | `src/components/cv/cv-accent-picker.tsx`, `src/lib/accent.ts` |
+| RF-UI-08 … RF-UI-10, RF-UI-15 | `src/components/cv/cv-accent-picker.tsx`, `src/lib/accent.tsx`, `src/components/accent-chat-tool.tsx` |
 | RF-UI-11, RF-UI-12 | `src/components/cv/cv-download-button.tsx`, `src/lib/use-pdf-download.ts` |
 | RF-UI-13 | `src/components/agent-panel.tsx` |
 | RF-UI-14 | `src/data/chat-suggestions.ts`, `src/components/agent-panel.tsx` |

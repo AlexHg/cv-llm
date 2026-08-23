@@ -48,4 +48,8 @@ export const chatSuggestions: ChatSuggestion[] = [
     message:
       "Cuéntame más sobre Chequemotiva, una de las empresas en las que colaboró Alejandro.",
   },
+  {
+    title: "Cambia el color a azul",
+    message: "Cambia el color de acento del CV a azul.",
+  },
 ];

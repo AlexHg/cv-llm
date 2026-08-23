@@ -109,7 +109,7 @@ Antes de llamar al backend, el servicio SHALL construir `instructions` con `cvTo
 
 Si el cliente envía `instructions`, SHALL concatenarse **después** del prompt del CV. El prompt del CV no se sustituye.
 
-El agente MUST usar solo hechos del perfil estructurado (alineado con FR 7 de `.cursor/functional-requierements.md`).
+El agente MUST usar solo hechos del perfil estructurado (alineado con FR 7 de `.cursor/functional-requierements.md`) y MUST rechazar pedidos fuera del perfil (FR 12).
 
 ### RF-OR-06 — Resolución de perfil
 

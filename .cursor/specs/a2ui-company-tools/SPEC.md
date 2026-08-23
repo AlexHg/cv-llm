@@ -78,6 +78,7 @@ Para trayectoria laboral, cada ítem MUST mapear un empleo: `title` = puesto, `s
 | `Radar de habilidades` | `Muéstrame un gráfico radar con las habilidades técnicas de Alejandro y su nivel.` |
 | `Línea de tiempo` | `Muéstrame la trayectoria profesional de Alejandro en una línea de tiempo, del rol más reciente al más antiguo.` |
 | `¿Qué es Chequemotiva?` | `Cuéntame más sobre Chequemotiva, una de las empresas en las que colaboró Alejandro.` |
+| `Cambia el color a azul` | `Cambia el color de acento del CV a azul.` (`SPEC-UI-001` RF-UI-15) |
 
 La pastilla de Chequemotiva nombra una empresa a propósito: es el camino de demo de la tool.
 

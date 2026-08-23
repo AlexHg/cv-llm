@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { useAccentColor } from "@/lib/accent";
+import { ACCENT_SWATCHES, useAccentColor } from "@/lib/accent";
 
 export function CvAccentPicker() {
   const { accent, setAccent, colors } = useAccentColor();
@@ -68,22 +68,25 @@ export function CvAccentPicker() {
           role="group"
           aria-label="Color de acento"
         >
-          {colors.map((color) => (
-            <button
-              key={color}
-              type="button"
-              className={`aspect-square w-full rounded-full border border-black/10 transition hover:scale-105 ${
-                accent === color ? "ring-2 ring-ink ring-offset-2" : ""
-              }`}
-              style={{ backgroundColor: color }}
-              aria-label={color}
-              aria-pressed={accent === color}
-              onClick={() => {
-                setAccent(color);
-                setOpen(false);
-              }}
-            />
-          ))}
+          {colors.map((color) => {
+            const swatch = ACCENT_SWATCHES.find((item) => item.hex === color);
+            return (
+              <button
+                key={color}
+                type="button"
+                className={`aspect-square w-full rounded-full border border-black/10 transition hover:scale-105 ${
+                  accent === color ? "ring-2 ring-ink ring-offset-2" : ""
+                }`}
+                style={{ backgroundColor: color }}
+                aria-label={swatch?.name ?? color}
+                aria-pressed={accent === color}
+                onClick={() => {
+                  setAccent(color);
+                  setOpen(false);
+                }}
+              />
+            );
+          })}
         </div>
       )}
     </div>

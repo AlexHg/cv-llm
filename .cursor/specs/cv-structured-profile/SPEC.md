@@ -137,6 +137,7 @@ El prompt SHALL:
 - Exigir IDs de cita cuando se afirme un hecho.
 - Tratar arreglos vacíos como “no consta en el perfil”.
 - Prohibir inventar certificaciones, empleos, logros o tecnologías.
+- Limitar el alcance al perfil y lo relacionado con él (FR 12). Fuera de tema: no responder el contenido, no llamar tools, disculparse y redirigir.
 
 ## 7. Criterios de aceptación
 
@@ -148,6 +149,7 @@ El prompt SHALL:
 - [ ] `GET /api/cv/competencies` → 200; un id inexistente sigue en 404 con la lista de bloques.
 - [ ] `certifications` está vacío y el prompt lo declara como no disponible.
 - [ ] El prompt del agente lista IDs `experience:`, `project:`, `skill:`, `competency:`.
+- [ ] El prompt declara el alcance (perfil y lo relacionado) y un mensaje de disculpa para off-topic.
 
 ## 8. Trazabilidad
 

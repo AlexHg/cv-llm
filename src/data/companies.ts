@@ -79,9 +79,9 @@ export const companies: CompanyProfile[] = [
     name: "Welfare",
     aliases: ["welfare"],
     country: "México",
-    sector: "Tecnología para organizaciones sociales",
+    sector: "Agencia para organizaciones de la sociedad civil",
     summary:
-      "Organización con la que Alejandro lideró desarrollo de software orientado a ONG: sitios institucionales, plantillas WordPress y plataformas de donaciones. No hay ficha pública adicional en este directorio.",
+      "Agencia mexicana enfocada en las organizaciones de la sociedad civil. Alejandro lideró el desarrollo de software: sitios institucionales, plantillas WordPress y plataformas de donaciones.",
     collaboration: {
       roles: ["Desarrollador Full Stack"],
       periods: ["Ene 2015 – Jun 2019"],
@@ -167,9 +167,10 @@ export const companies: CompanyProfile[] = [
     name: "Gavide",
     aliases: ["gavide"],
     country: "México",
-    sector: "Consultoría de datos",
+    sector: "Implementación de soluciones empresariales SAP",
     summary:
-      "Consultora con la que se entregó el data warehouse de un proveedor de medicamentos del ISSSTE (dashboards en Google Data Studio y Looker). No hay ficha pública adicional en este directorio.",
+      "Empresa dedicada a la implementación de soluciones empresariales basadas en SAP. La colaboración cubrió el data warehouse de un proveedor de medicamentos del ISSSTE (dashboards en Google Data Studio y Looker).",
+    website: "https://gavide.com/",
     collaboration: {
       roles: ["Consultoría independiente — data warehouse"],
       periods: ["2021–2022"],
