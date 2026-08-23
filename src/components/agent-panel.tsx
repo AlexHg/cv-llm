@@ -18,7 +18,7 @@ export function AgentPanel() {
         labels={{
           modalHeaderTitle: "Agente de CV",
           welcomeMessageText:
-            "Hola. Pregúntame por el perfil Cloud de Alejandro cuando quieras.",
+            "Hola. Pregúntame por el perfil de Alejandro cuando quieras.",
           chatInputPlaceholder: "Escribe tu pregunta...",
         }}
       />

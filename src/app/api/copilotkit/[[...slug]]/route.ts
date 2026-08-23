@@ -1,5 +1,6 @@
 import { cvToAgentPrompt } from "@/lib/cv-prompt";
 import { resolveCv } from "@/data/resolve-cv";
+import { createOpenResponsesModel } from "@/lib/open-responses";
 import {
   BuiltInAgent,
   CopilotRuntime,
@@ -10,7 +11,7 @@ import {
 const cv = resolveCv("cloud");
 
 const builtInAgent = new BuiltInAgent({
-  model: "openai:gpt-4o-mini",
+  model: createOpenResponsesModel() ?? "openai:gpt-4o-mini",
   prompt: cvToAgentPrompt(cv),
 });
 

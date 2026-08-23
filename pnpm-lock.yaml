@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@ai-sdk/open-responses':
+        specifier: ^1.0.35
+        version: 1.0.35(zod@4.4.3)
       '@copilotkit/react-core':
         specifier: ^1.69.0
         version: 1.69.0(@types/mdast@4.0.4)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(graphql@16.14.2)(micromark-util-types@2.0.2)(micromark@4.0.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(zod@4.4.3)
@@ -155,6 +158,12 @@ packages:
 
   '@ai-sdk/mcp@1.0.72':
     resolution: {integrity: sha512-1AOrKQ2KWGa0HfTOLDPVyR57GtWJYTuXz7jT0d6JWNs7R6Nv/LcdkbkayTQgSHTA10CC1FrRIcSs2UKLNPDVVw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
+  '@ai-sdk/open-responses@1.0.35':
+    resolution: {integrity: sha512-1NDDfIowQB5ZW7OvL/1WYgOq8V83MaoOuLSsJJG4rIBLNtIzeus7Mr4QIIek7sG3EKN7YvdbRVC785h1Uttcaw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -5142,6 +5151,12 @@ snapshots:
       pkce-challenge: 5.0.1
       zod: 3.25.76
 
+  '@ai-sdk/open-responses@1.0.35(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider': 3.0.15
+      '@ai-sdk/provider-utils': 4.0.46(zod@4.4.3)
+      zod: 4.4.3
+
   '@ai-sdk/openai-compatible@1.0.48(zod@3.25.76)':
     dependencies:
       '@ai-sdk/provider': 2.0.3
@@ -5169,6 +5184,14 @@ snapshots:
       eventsource-parser: 3.1.1
       undici: 6.28.0
       zod: 3.25.76
+
+  '@ai-sdk/provider-utils@4.0.46(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider': 3.0.15
+      '@standard-schema/spec': 1.1.0
+      eventsource-parser: 3.1.1
+      undici: 6.28.0
+      zod: 4.4.3
 
   '@ai-sdk/provider@2.0.3':
     dependencies:
