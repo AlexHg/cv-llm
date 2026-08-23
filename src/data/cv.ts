@@ -94,7 +94,7 @@ export const competencies: CvCompetency[] = [
 export const cvBase: CvBase = {
   firstName: "Alejandro",
   lastName: "Hernández",
-  headline: "ARQUITECTO CLOUD & SAAS  |  GEN-AI BUILDER",
+  headline: "CLOUD & SAAS ARCHITECT  ||  GEN-AI BUILDER",
   photo: "/profile.jpeg",
   about:
     "Arquitecto Cloud y SaaS con más de una década diseñando, desarrollando y escalando sistemas listos para producción en AWS. He ayudado a startups y equipos empresariales a acelerar su crecimiento construyendo MVPs y plataformas cloud resilientes con tecnologías full-stack modernas, desde el diseño de arquitectura hasta la excelencia operativa. Fuerte enfoque en alta disponibilidad, diseño consciente de costos y productos habilitados con Gen-AI que cumplen restricciones de negocio reales. Conecto objetivos de producto con decisiones de infraestructura para que los equipos entreguen con confiabilidad a escala.",
@@ -484,9 +484,7 @@ export const cvBase: CvBase = {
       challenges: [
         "Múltiples servicios de distribución sobre un modelo multitenant",
       ],
-      results: [
-        "Plataforma SaaS de distribución de cupones y gift cards",
-      ],
+      results: ["Plataforma SaaS de distribución de cupones y gift cards"],
       learnings: [],
     },
     {
@@ -615,9 +613,7 @@ export const cvBase: CvBase = {
         "Cargar, filtrar y clasificar datos genómicos y generar reportes en un flujo colaborativo.",
       role: "Lideró el desarrollo frontend (independiente / Nuclear).",
       architecture: "Nuxt, MongoDB, AWS, charts y visualización de datos.",
-      challenges: [
-        "Flujo interactivo y colaborativo sobre datos científicos",
-      ],
+      challenges: ["Flujo interactivo y colaborativo sobre datos científicos"],
       results: [
         "Plataforma frontend para análisis genómico, filtrado y reportes",
       ],
