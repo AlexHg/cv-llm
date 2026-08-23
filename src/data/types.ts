@@ -9,6 +9,7 @@ export type CvBlockId =
   | "expertise"
   | "skills"
   | "projects"
+  | "competencies"
   | "profiles";
 
 export type ExpertiseId =
@@ -25,6 +26,26 @@ export type ExpertiseId =
   | "aws"
   | "hexagonal";
 
+export type ExperienceFocus =
+  | "technical"
+  | "leadership"
+  | "genai"
+  | "business";
+
+export type CompetencyId =
+  | "leadership"
+  | "collaboration"
+  | "mentoring"
+  | "communication";
+
+export type CvSourceKind = "experience" | "project";
+
+export interface CvSourceRef {
+  kind: CvSourceKind;
+  id: string;
+  how: string;
+}
+
 export interface CvContact {
   type: "phone" | "email" | "linkedin" | "country";
   label: string;
@@ -38,6 +59,10 @@ export interface CvExperience {
   period: string;
   description: string;
   page: 1 | 2;
+  responsibilities: string[];
+  achievements: string[];
+  technologies: string[];
+  focuses: ExperienceFocus[];
 }
 
 export interface CvEducation {
@@ -49,6 +74,7 @@ export interface CvEducation {
 export interface CvSkill {
   name: string;
   level: number;
+  evidence: CvSourceRef[];
 }
 
 export interface CvSideProject {
@@ -57,6 +83,19 @@ export interface CvSideProject {
   meta: string;
   description: string;
   keywords: string;
+  problem: string;
+  role: string;
+  architecture: string;
+  challenges: string[];
+  results: string[];
+  learnings: string[];
+}
+
+export interface CvCompetency {
+  id: CompetencyId;
+  name: string;
+  how: string;
+  sources: Omit<CvSourceRef, "how">[];
 }
 
 export interface CvLabels {
@@ -87,6 +126,10 @@ export interface CvIdentity {
   headline: string;
   photo: string;
   profile: CvProfileSummary;
+  rolesSought: string[];
+  strengths: string[];
+  interests: string[];
+  certifications: string[];
 }
 
 export interface CvAbout {
@@ -118,6 +161,10 @@ export interface CvProjectsBlock {
   items: CvSideProject[];
 }
 
+export interface CvCompetenciesBlock {
+  items: CvCompetency[];
+}
+
 export interface CvProfilesBlock {
   items: CvProfileSummary[];
   default: ProfileId;
@@ -136,25 +183,13 @@ export interface CvData {
   expertise: string[];
   skills: CvSkill[];
   sideProjects: CvSideProject[];
+  rolesSought: string[];
+  strengths: string[];
+  interests: string[];
+  certifications: string[];
+  competencies: CvCompetency[];
   labels: CvLabels;
   profile: ProfileId;
-}
-
-export interface CvExperienceSource {
-  id: string;
-  title: string;
-  company: string;
-  period: string;
-  description: string;
-  page: 1 | 2;
-}
-
-export interface CvProjectSource {
-  id: string;
-  title: string;
-  meta: string;
-  description: string;
-  keywords: string;
 }
 
 export interface CvBase {
@@ -163,15 +198,20 @@ export interface CvBase {
   headline: string;
   photo: string;
   about: string;
+  rolesSought: string[];
+  strengths: string[];
+  interests: string[];
+  certifications: string[];
   contact: {
     type: CvContact["type"];
     value: string;
   }[];
-  experience: CvExperienceSource[];
+  experience: CvExperience[];
   education: CvEducation;
   expertise: CvExpertiseItem[];
   skills: CvSkill[];
-  sideProjects: CvProjectSource[];
+  sideProjects: CvSideProject[];
+  competencies: CvCompetency[];
 }
 
 export interface CvBlockResponse<T> {
@@ -197,6 +237,7 @@ export const CV_BLOCKS: CvBlockId[] = [
   "expertise",
   "skills",
   "projects",
+  "competencies",
   "profiles",
 ];
 

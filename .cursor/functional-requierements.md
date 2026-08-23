@@ -1,6 +1,6 @@
 Requerimientos funcionales del agente de CV
 
-Specs de features: [Open Responses](./specs/open-responses/SPEC.md) (`SPEC-OR-001`), [Interfaz CopilotKit + CV](./specs/copilot-ui/SPEC.md) (`SPEC-UI-001`).
+Specs de features: [Open Responses](./specs/open-responses/SPEC.md) (`SPEC-OR-001`), [Interfaz CopilotKit + CV](./specs/copilot-ui/SPEC.md) (`SPEC-UI-001`), [Perfil estructurado](./specs/cv-structured-profile/SPEC.md) (`SPEC-CV-002`).
 
 1. Presentar el perfil profesional 👤
    El agente deberá responder preguntas sobre:
@@ -10,7 +10,9 @@ Especialidad y áreas de interés.
 Roles buscados.
 Principales fortalezas.
 Trayectoria profesional.
-Formación académica y certificaciones, si están incluidas en el perfil. 2. Explicar la experiencia laboral 💼
+Formación académica y certificaciones, si están incluidas en el perfil. 
+
+2. Explicar la experiencia laboral 💼
 El agente deberá proporcionar información sobre cada experiencia profesional, incluyendo:
 
 Empresa u organización.
@@ -24,7 +26,9 @@ También deberá adaptar la explicación según el contexto, por ejemplo:
 Enfoque técnico.
 Enfoque de liderazgo.
 Enfoque de inteligencia artificial.
-Enfoque de impacto de negocio. 3. Describir habilidades y competencias 🧠
+Enfoque de impacto de negocio. 
+
+3. Describir habilidades y competencias 🧠
 El agente deberá identificar y explicar:
 
 Lenguajes de programación.

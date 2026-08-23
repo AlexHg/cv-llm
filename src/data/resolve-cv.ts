@@ -2,6 +2,7 @@ import { cvBase, profileSummary, sectionLabels } from "./cv";
 import type {
   CvAbout,
   CvBlockId,
+  CvCompetenciesBlock,
   CvContactBlock,
   CvData,
   CvEducation,
@@ -11,8 +12,6 @@ import type {
   CvIdentity,
   CvProfilesBlock,
   CvProjectsBlock,
-  CvSideProject,
-  CvSkill,
   CvSkillsBlock,
   ProfileId,
 } from "./types";
@@ -33,6 +32,10 @@ export function getIdentity(): CvIdentity {
     headline: cvBase.headline,
     photo: cvBase.photo,
     profile: profileSummary,
+    rolesSought: cvBase.rolesSought,
+    strengths: cvBase.strengths,
+    interests: cvBase.interests,
+    certifications: cvBase.certifications,
   };
 }
 
@@ -53,16 +56,7 @@ export function getContact(): CvContactBlock {
 }
 
 export function getExperience(): CvExperienceBlock {
-  return {
-    items: cvBase.experience.map((job) => ({
-      id: job.id,
-      title: job.title,
-      company: job.company,
-      period: job.period,
-      description: job.description,
-      page: job.page,
-    })),
-  };
+  return { items: cvBase.experience };
 }
 
 export function getEducation(): CvEducation {
@@ -79,6 +73,10 @@ export function getSkills(): CvSkillsBlock {
 
 export function getProjects(): CvProjectsBlock {
   return { items: cvBase.sideProjects };
+}
+
+export function getCompetencies(): CvCompetenciesBlock {
+  return { items: cvBase.competencies };
 }
 
 export function getProfiles(): CvProfilesBlock {
@@ -106,6 +104,8 @@ export function getCvBlock(block: CvBlockId) {
       return getSkills();
     case "projects":
       return getProjects();
+    case "competencies":
+      return getCompetencies();
     case "profiles":
       return getProfiles();
   }
@@ -128,8 +128,13 @@ export function resolveCv(profile: ProfileId = DEFAULT_PROFILE): CvData {
     experiencePage2: byPage(2),
     education: getEducation(),
     expertise: getExpertise().items.map((item) => item.name),
-    skills: getSkills().items satisfies CvSkill[],
-    sideProjects: getProjects().items satisfies CvSideProject[],
+    skills: getSkills().items,
+    sideProjects: getProjects().items,
+    rolesSought: identity.rolesSought,
+    strengths: identity.strengths,
+    interests: identity.interests,
+    certifications: identity.certifications,
+    competencies: getCompetencies().items,
     labels: sectionLabels,
     profile,
   };

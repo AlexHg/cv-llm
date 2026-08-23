@@ -177,6 +177,7 @@ Con autenticación válida:
 
 - `GET /api/cv` → `{ block: "cv", profile, data }`
 - `GET /api/cv/{block}` → el bloque pedido, o `404` con la lista de bloques si no existe
+- El listado de bloques incluye `competencies` (`SPEC-CV-002`)
 
 `profile` se lee de `?profile=` (default `cloud`).
 
