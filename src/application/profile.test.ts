@@ -149,6 +149,8 @@ describe("prompt por canal", () => {
     expect(prompt).toContain("NUNCA restes años");
     expect(prompt).toContain("Herramienta query_profile");
     expect(prompt).toContain("Herramienta lookup_company");
+    expect(prompt).toContain("Soy tu asistente de currículum");
+    expect(prompt).toContain("Un saludo solo NUNCA usa este mensaje de rechazo");
     expect(prompt).toContain("show_skills_radar");
     expect(prompt).not.toContain("también conocida como CQM Rewards");
     expect(profile.experience.every((job) => job.period && job.durationLabel)).toBe(

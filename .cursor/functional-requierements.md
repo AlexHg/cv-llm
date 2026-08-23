@@ -132,6 +132,7 @@ Experiencia laboral y empresas en las que colaboró.
 Habilidades, competencias y proyectos.
 Encaje para un rol, resúmenes e introducción para entrevista.
 Visuales del CV (radar, línea de tiempo) y el color de acento del documento.
+Saludos, agradecimientos y despedidas: dar la bienvenida y redirigir al perfil, sin rechazarlos.
 
 Si el pedido está fuera de ese alcance, el agente MUST:
 
