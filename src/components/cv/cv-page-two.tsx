@@ -16,7 +16,7 @@ export function CvPageTwo({ cv }: { cv: CvData }) {
               {cv.labels.experienceContinued}
             </span>
           </h2>
-          <div className="mt-4 space-y-4">
+          <div className="mt-4 space-y-4 text-soft">
             {cv.experiencePage2.map((job) => (
               <CvExperienceItem key={job.id} {...job} />
             ))}

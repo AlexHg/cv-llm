@@ -24,7 +24,7 @@ export function CvContactCard({ type, label, value }: CvContact) {
           <path d={icons[type]} />
         </svg>
       </div>
-      <div className="flex-1 bg-ink px-3 pt-0.5 pb-3">
+      <div className="flex-1 bg-ink px-3 py-2">
         <p className="font-head text-[10px] leading-tight font-bold tracking-[0.22em] text-white">
           {label}
         </p>

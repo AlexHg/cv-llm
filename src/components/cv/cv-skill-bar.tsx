@@ -5,7 +5,7 @@ export function CvSkillBar({ name, level }: CvSkill) {
     <div className="flex items-center justify-between">
       <span className="flex items-center gap-3 text-[11.5px] tracking-[0.08em] text-soft">
         <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-body" />
-        <span className="-mt-1.5 mb-1.5">{name}</span>
+        <span className="mt-0">{name}</span>
       </span>
       <span className="flex gap-[5px]">
         {Array.from({ length: 5 }, (_, index) => (

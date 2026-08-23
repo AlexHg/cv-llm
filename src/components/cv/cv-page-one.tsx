@@ -35,7 +35,7 @@ export function CvPageOne({ cv }: { cv: CvData }) {
             {cv.labels.about}
           </h2>
           <p
-            className="mt-3.5 text-[11.5px] leading-[1.62]"
+            className="mt-3.5 text-[11.5px] leading-[1.62] text-soft"
             dangerouslySetInnerHTML={{ __html: cv.about }}
           />
         </div>
@@ -54,7 +54,7 @@ export function CvPageOne({ cv }: { cv: CvData }) {
           <h2 className="font-head text-[19px] font-bold tracking-[0.18em] text-ink">
             {cv.labels.experience}
           </h2>
-          <div className="mt-4 space-y-4">
+          <div className="mt-4 space-y-4 text-soft">
             {cv.experiencePage1.map((job) => (
               <CvExperienceItem key={job.id} {...job} />
             ))}
@@ -86,7 +86,7 @@ export function CvPageOne({ cv }: { cv: CvData }) {
                 key={item}
                 className="flex items-center gap-3 text-[11.5px] tracking-[0.08em] text-soft"
               >
-                <span className="mt-2.5 h-[5px] w-[5px] shrink-0 rounded-full bg-body" />
+                <span className="mt-1 mb-1 h-[5px] w-[5px] shrink-0 rounded-full bg-body" />
                 {item}
               </li>
             ))}
