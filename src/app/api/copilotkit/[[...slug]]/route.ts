@@ -11,7 +11,7 @@ import {
 const cv = resolveCv("cloud");
 
 const builtInAgent = new BuiltInAgent({
-  model: createOpenResponsesModel() ?? "openai:gpt-4o-mini",
+  model: createOpenResponsesModel(),
   prompt: cvToAgentPrompt(cv),
 });
 

@@ -53,7 +53,7 @@ Sin un contrato HTTP estándar:
 | Humano en el navegador | Ninguna (UI) | CopilotKit → `/api/copilotkit` |
 | Sistema externo (evaluador, agente, CI) | `INTERNAL_API_KEY` | `POST /v1/responses` |
 | Sistema externo que lee el CV estructurado | `INTERNAL_API_KEY` | `GET /api/cv`, `GET /api/cv/{block}` |
-| Backend LLM | `OPEN_RESPONSES_API_KEY` o `OPENAI_API_KEY` | `OPEN_RESPONSES_URL` |
+| Backend LLM | `OPEN_RESPONSES_API_KEY` | `OPEN_RESPONSES_URL` |
 
 ## 6. Requisitos funcionales
 
@@ -126,8 +126,7 @@ Orden de precedencia (el primero válido gana):
 
 | `model` del cliente | Modelo hacia el backend |
 | --- | --- |
-| ausente, `cv` o `cv-{perfil}` | `OPEN_RESPONSES_MODEL` o `gpt-4o-mini` |
-| otro valor | el valor, quitando el prefijo `openai:` |
+| ausente, `cv` o `cv-{perfil}` | `OPEN_RESPONSES_MODEL` |
 
 ### RF-OR-08 — Reenvío al backend Open Responses
 
@@ -168,7 +167,7 @@ Las respuestas 401/400/5xx del endpoint de integración también MUST llevar est
 
 `BuiltInAgent` SHALL usar un `LanguageModel` creado con `@ai-sdk/open-responses` (`createOpenResponses`) contra `OPEN_RESPONSES_URL`.
 
-Si no hay key de backend, MAY caer a `openai:gpt-4o-mini`.
+La UI MUST NOT caer a un proveedor `openai:` ni leer `OPENAI_API_KEY`.
 
 La UI sigue usando el prompt del perfil Cloud por defecto.
 
@@ -270,9 +269,8 @@ data: [DONE]
 | --- | --- | --- |
 | `INTERNAL_API_KEY` | Autenticación inbound | Sí, para integración |
 | `OPEN_RESPONSES_URL` | URL del `POST` del backend (o base; se normaliza) | No (default OpenAI) |
-| `OPEN_RESPONSES_API_KEY` | Bearer hacia el backend | Sí, o `OPENAI_API_KEY` |
+| `OPEN_RESPONSES_API_KEY` | Bearer hacia el backend | Sí |
 | `OPEN_RESPONSES_MODEL` | Modelo por defecto | No (`gpt-4o-mini`) |
-| `OPENAI_API_KEY` | Respaldo de key de backend y fallback de CopilotKit | Condicional |
 
 Documentadas en `.env.example`. Los secretos reales solo en `.env` (gitignored).
 
@@ -301,7 +299,7 @@ Un revisor puede marcar el feature como cumplido si:
 - [ ] `GET /api/cv` sin key → `401`; con key → `200` y `block: "cv"`.
 - [ ] `GET /api/cv/identity?profile=genai` con `x-api-key` → `profile: "genai"`.
 - [ ] `GET /api/copilotkit/info` → `200` sin `INTERNAL_API_KEY`.
-- [ ] CopilotKit instancia el modelo vía `createOpenResponses` cuando hay key de backend.
+- [ ] CopilotKit instancia el modelo vía `createOpenResponses`. 
 - [ ] `.env.example` declara `INTERNAL_API_KEY` y las variables Open Responses. `.env` no se versiona.
 
 ## 11. Trazabilidad

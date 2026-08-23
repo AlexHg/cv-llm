@@ -25,8 +25,6 @@ OPEN_RESPONSES_MODEL=gpt-4o-mini
 INTERNAL_API_KEY=un_secreto_largo_y_aleatorio
 ```
 
-`OPENAI_API_KEY` puede usarse como respaldo si no defines `OPEN_RESPONSES_API_KEY`.
-
 3. Instala dependencias (si aún no lo has hecho) y arranca el servidor:
 
 ```bash

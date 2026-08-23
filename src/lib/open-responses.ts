@@ -40,11 +40,7 @@ export function getOpenResponsesUrl() {
 }
 
 export function getOpenResponsesApiKey() {
-  return (
-    process.env.OPEN_RESPONSES_API_KEY?.trim() ||
-    process.env.OPENAI_API_KEY?.trim() ||
-    ""
-  );
+  return process.env.OPEN_RESPONSES_API_KEY?.trim() || "";
 }
 
 export function getOpenResponsesModel() {
@@ -52,13 +48,10 @@ export function getOpenResponsesModel() {
 }
 
 export function createOpenResponsesModel() {
-  const apiKey = getOpenResponsesApiKey();
-  if (!apiKey) return null;
-
   const openResponses = createOpenResponses({
     name: "open-responses",
     url: getOpenResponsesUrl(),
-    apiKey,
+    apiKey: getOpenResponsesApiKey(),
   });
 
   return openResponses(getOpenResponsesModel());
