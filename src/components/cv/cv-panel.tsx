@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { CvData } from "@/data/types";
+import type { CvPrintView } from "@/application/print";
 import { CvAccentPicker } from "./cv-accent-picker";
 import { CvDownloadButton } from "./cv-download-button";
 import { CvPageOne } from "./cv-page-one";
@@ -10,7 +10,7 @@ import { CvPageTwo } from "./cv-page-two";
 const PAGE_WIDTH = 794;
 const PAGE_HEIGHT = 1123;
 
-export function CvPanel({ cv }: { cv: CvData }) {
+export function CvPanel({ cv }: { cv: CvPrintView }) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.72);
 

@@ -1,9 +1,9 @@
-import type { CvData } from "@/data/types";
+import type { CvPrintView } from "@/application/print";
 import { CvExperienceItem } from "./cv-experience-item";
 import { CvSideProject } from "./cv-side-project";
 import { CvSkillBar } from "./cv-skill-bar";
 
-export function CvPageTwo({ cv }: { cv: CvData }) {
+export function CvPageTwo({ cv }: { cv: CvPrintView }) {
   return (
     <div className="page px-[14mm] pt-[11mm] pb-[8mm] shadow-2xl" id="page2">
       <div className="grid grid-cols-[1fr_62mm] gap-x-[10mm]">

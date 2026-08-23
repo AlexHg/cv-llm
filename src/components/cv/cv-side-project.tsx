@@ -1,4 +1,4 @@
-import type { CvSideProject } from "@/data/types";
+import type { CvSideProject } from "@/domain/cv";
 
 type CvSideProjectProps = CvSideProject & {
   keywordsLabel: string;

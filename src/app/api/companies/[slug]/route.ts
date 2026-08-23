@@ -1,8 +1,7 @@
 import type { NextRequest } from "next/server";
 import { listCompanyNames } from "@/data/companies";
-import { unauthorizedResponse } from "@/lib/internal-auth";
-import { getCompanyBySlug } from "@/lib/lookup-company";
-import { resolveCompanyProfile } from "@/lib/resolve-company";
+import { getCompanyBySlug, resolveCompanyProfile } from "@/application/profile";
+import { unauthorizedResponse } from "@/adapters/http/auth";
 
 export async function GET(
   request: NextRequest,

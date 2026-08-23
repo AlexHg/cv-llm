@@ -3,7 +3,7 @@ import {
   formatDuration,
   formatPeriod,
   monthsBetween,
-} from "@/lib/cv-dates";
+} from "@/domain/dates";
 
 describe("monthsBetween", () => {
   it("calcula tramos mensuales como en el CV", () => {

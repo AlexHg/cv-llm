@@ -1,4 +1,4 @@
-import type { CvExperience } from "@/data/types";
+import type { CvExperience } from "@/domain/cv";
 
 export function CvExperienceItem({
   title,

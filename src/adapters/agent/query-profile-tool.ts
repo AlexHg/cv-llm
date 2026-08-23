@@ -1,6 +1,6 @@
 import { defineTool } from "@copilotkit/runtime/v2";
 import { z } from "zod";
-import { queryProfile } from "@/lib/query-profile";
+import { queryProfile } from "@/application/profile";
 
 export const queryProfileTool = defineTool({
   name: "query_profile",

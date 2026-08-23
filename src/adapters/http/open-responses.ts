@@ -1,8 +1,8 @@
 import { createOpenResponses } from "@ai-sdk/open-responses";
+import { agentPrompt } from "@/application/agent";
+import { getProfile } from "@/application/profile";
+import { parseProfile, type ProfileId } from "@/application/cv-blocks";
 import type { NextRequest } from "next/server";
-import type { ProfileId } from "@/data/types";
-import { parseProfile, resolveCv } from "@/data/resolve-cv";
-import { cvToAgentPrompt } from "@/lib/cv-prompt";
 
 const DEFAULT_BACKEND_URL = "https://api.openai.com/v1/responses";
 const DEFAULT_MODEL = "gpt-4o-mini";
@@ -55,6 +55,36 @@ export function createOpenResponsesModel() {
   });
 
   return openResponses(getOpenResponsesModel());
+}
+
+export async function forwardOpenResponses(
+  body: Record<string, unknown>,
+  signal?: AbortSignal,
+) {
+  const apiKey = getOpenResponsesApiKey();
+
+  if (!apiKey) {
+    return {
+      error: openResponsesError(
+        503,
+        "server_error",
+        "No hay API key de Open Responses configurada",
+        "backend_not_configured",
+      ),
+    };
+  }
+
+  const upstream = await fetch(getOpenResponsesUrl(), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+    signal,
+  });
+
+  return { upstream };
 }
 
 function profileFromModel(model: unknown) {
@@ -111,8 +141,8 @@ export function prepareOpenResponsesBody(
     };
   }
 
-  const profile = profileFromOpenResponsesRequest(body, request);
-  const instructions = cvToAgentPrompt(resolveCv(profile));
+  void profileFromOpenResponsesRequest(body, request);
+  const instructions = agentPrompt("integration", getProfile());
   const extra =
     typeof body.instructions === "string" ? body.instructions.trim() : "";
 
@@ -124,34 +154,4 @@ export function prepareOpenResponsesBody(
   };
 
   return { body: nextBody };
-}
-
-export async function forwardOpenResponses(
-  body: Record<string, unknown>,
-  signal?: AbortSignal,
-) {
-  const apiKey = getOpenResponsesApiKey();
-
-  if (!apiKey) {
-    return {
-      error: openResponsesError(
-        503,
-        "server_error",
-        "No hay API key de Open Responses configurada",
-        "backend_not_configured",
-      ),
-    };
-  }
-
-  const upstream = await fetch(getOpenResponsesUrl(), {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-    signal,
-  });
-
-  return { upstream };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { ACCENT_SWATCHES, useAccentColor } from "@/lib/accent";
+import { ACCENT_SWATCHES, useAccentColor } from "@/components/accent";
 
 export function CvAccentPicker() {
   const { accent, setAccent, colors } = useAccentColor();

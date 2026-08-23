@@ -1,23 +1,21 @@
-import type { CvBase, CvCompetency, CvExpertiseItem, CvLabels } from "./types";
+import type { CvBase, CvCompetency, CvExpertiseItem } from "@/domain/cv";
 
-export type {
-  CvContact,
-  CvData,
-  CvEducation,
-  CvExperience,
-  CvLabels,
-  CvSideProject,
-  CvSkill,
-  ProfileId,
-} from "./types";
-
-export {
-  CV_BLOCKS,
-  DEFAULT_PROFILE,
-  isCvBlockId,
-  isProfileId,
-  PROFILE_IDS,
-} from "./types";
+export interface CvLabels {
+  about: string;
+  experience: string;
+  experienceContinued: string;
+  education: string;
+  expertise: string;
+  techSkills: string;
+  sideProjects: string;
+  keywords: string;
+  downloadPdf: string;
+  generating: string;
+  phone: string;
+  email: string;
+  linkedin: string;
+  country: string;
+}
 
 export const profileSummary = {
   id: "cloud" as const,

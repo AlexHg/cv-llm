@@ -1,4 +1,4 @@
-import type { CvContact } from "@/data/types";
+import type { CvContact } from "@/application/print";
 
 const icons: Record<CvContact["type"], string> = {
   phone:

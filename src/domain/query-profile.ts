@@ -1,16 +1,13 @@
-import type { CompanyTenure, ExperienceFocus } from "@/data/types";
-import {
-  getExperience,
-  getProjects,
-  getSkills,
-} from "@/data/resolve-cv";
-import { lookupCompany } from "@/lib/lookup-company";
+import type { CompanyTenure, ExperienceFocus } from "@/domain/cv";
+import { lookupCompany } from "@/domain/lookup-company";
+import type { ProfileSnapshot } from "@/domain/snapshot";
 import {
   employmentTenures,
   findCompaniesForProject,
   relatedEmployerNote,
-} from "@/lib/cv-tenure";
-import { compareDates } from "@/lib/cv-dates";
+} from "@/domain/tenure";
+import { includesNormalized } from "@/domain/text";
+import { compareDates } from "@/domain/dates";
 
 export const QUERY_PROFILE_INTENTS = [
   "experience",
@@ -63,31 +60,19 @@ export type QueryProfileResult =
       facts: unknown[];
     };
 
-function normalize(value: string) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-function includesNormalized(haystack: string, needle: string) {
-  const left = normalize(haystack);
-  const right = normalize(needle);
-  return Boolean(right) && left.includes(right);
-}
-
 function defaultSort(intent: QueryProfileIntent): QueryProfileSort {
   if (intent === "company_tenure") return "duration";
   if (intent === "skills") return "level";
   return "recent";
 }
 
-function resolveCompanyFilter(query?: string): QueryMiss | { slug: string; name: string } | null {
+function resolveCompanyFilter(
+  snapshot: ProfileSnapshot,
+  query: string | undefined,
+): QueryMiss | { slug: string; name: string } | null {
   if (!query?.trim()) return null;
 
-  const result = lookupCompany(query);
+  const result = lookupCompany(snapshot.companies, query);
   if (!result.found) {
     return {
       ok: false,
@@ -101,17 +86,19 @@ function resolveCompanyFilter(query?: string): QueryMiss | { slug: string; name:
   return { slug: result.company.slug, name: result.company.name };
 }
 
-function experienceIdsForTechnology(technology: string) {
+function experienceIdsForTechnology(
+  snapshot: ProfileSnapshot,
+  technology: string,
+) {
   const ids = new Set<string>();
-  const { items } = getExperience();
 
-  for (const job of items) {
+  for (const job of snapshot.experience) {
     if (job.technologies.some((item) => includesNormalized(item, technology))) {
       ids.add(job.id);
     }
   }
 
-  for (const skill of getSkills().items) {
+  for (const skill of snapshot.skills) {
     if (!includesNormalized(skill.name, technology)) continue;
     for (const evidence of skill.evidence) {
       if (evidence.kind === "experience") ids.add(evidence.id);
@@ -122,14 +109,15 @@ function experienceIdsForTechnology(technology: string) {
 }
 
 function projectMatchesTechnology(
-  project: ReturnType<typeof getProjects>["items"][number],
+  snapshot: ProfileSnapshot,
+  project: ProfileSnapshot["projects"][number],
   technology: string,
 ) {
   if (includesNormalized(project.keywords, technology)) return true;
   if (includesNormalized(project.architecture, technology)) return true;
   if (includesNormalized(project.title, technology)) return true;
 
-  return getSkills().items.some(
+  return snapshot.skills.some(
     (skill) =>
       includesNormalized(skill.name, technology) &&
       skill.evidence.some(
@@ -147,7 +135,12 @@ function sortBy<T>(
     level: (item: T) => number;
   },
 ) {
-  const key = sort === "level" ? accessors.level : sort === "duration" ? accessors.duration : accessors.recent;
+  const key =
+    sort === "level"
+      ? accessors.level
+      : sort === "duration"
+        ? accessors.duration
+        : accessors.recent;
   return [...items].sort((left, right) => key(right) - key(left));
 }
 
@@ -157,24 +150,28 @@ function notesForTenures(tenures: CompanyTenure[]) {
     .filter((note): note is string => Boolean(note));
 }
 
-export function queryProfile(input: QueryProfileInput): QueryProfileResult {
+export function queryProfile(
+  snapshot: ProfileSnapshot,
+  input: QueryProfileInput,
+): QueryProfileResult {
   const intent = input.intent;
   const sort = input.sort ?? defaultSort(intent);
-  const companyFilter = resolveCompanyFilter(input.company);
+  const companyFilter = resolveCompanyFilter(snapshot, input.company);
 
   if (companyFilter && "ok" in companyFilter && companyFilter.ok === false) {
     return { ...companyFilter, intent };
   }
 
-  const experience = getExperience();
-  const projects = getProjects().items;
-  const companySlug = companyFilter && "slug" in companyFilter ? companyFilter.slug : undefined;
+  const companySlug =
+    companyFilter && "slug" in companyFilter ? companyFilter.slug : undefined;
+  const companyName =
+    companyFilter && "name" in companyFilter ? companyFilter.name : undefined;
   const notes: string[] = [];
 
   if (intent === "company_tenure") {
     let tenures = companySlug
-      ? experience.byCompany.filter((item) => item.slug === companySlug)
-      : employmentTenures(experience.byCompany);
+      ? snapshot.tenures.filter((item) => item.slug === companySlug)
+      : employmentTenures(snapshot.tenures);
 
     tenures = sortBy(tenures, sort === "level" ? "duration" : sort, {
       recent: (item) => compareDates(item.end, { year: 0 }, "end"),
@@ -193,22 +190,22 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
       ok: true,
       intent,
       filters: {
-        company: companyFilter && "name" in companyFilter ? companyFilter.name : undefined,
+        company: companyName,
         technology: input.technology,
         focus: input.focus,
         sort: sort === "level" ? "duration" : sort,
       },
       notes,
-      highlights: experience.highlights,
+      highlights: snapshot.highlights,
       facts: tenures,
     };
   }
 
   if (intent === "experience") {
-    let jobs = experience.items;
+    let jobs = snapshot.experience;
 
     if (companySlug) {
-      const tenure = experience.byCompany.find((item) => item.slug === companySlug);
+      const tenure = snapshot.tenures.find((item) => item.slug === companySlug);
       const allowed = new Set(tenure?.roles.map((role) => role.id) ?? []);
       jobs = jobs.filter((job) => allowed.has(job.id));
     }
@@ -218,7 +215,7 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
     }
 
     if (input.technology) {
-      const allowed = experienceIdsForTechnology(input.technology);
+      const allowed = experienceIdsForTechnology(snapshot, input.technology);
       jobs = jobs.filter((job) => allowed.has(job.id));
     }
 
@@ -229,7 +226,7 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
     });
 
     if (companySlug) {
-      const tenure = experience.byCompany.find((item) => item.slug === companySlug);
+      const tenure = snapshot.tenures.find((item) => item.slug === companySlug);
       if (tenure) notes.push(...notesForTenures([tenure]));
     }
 
@@ -237,13 +234,13 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
       ok: true,
       intent,
       filters: {
-        company: companyFilter && "name" in companyFilter ? companyFilter.name : undefined,
+        company: companyName,
         technology: input.technology,
         focus: input.focus,
         sort: sort === "level" ? "recent" : sort,
       },
       notes,
-      highlights: experience.highlights,
+      highlights: snapshot.highlights,
       facts: ordered.map((job) => ({
         id: job.id,
         title: job.title,
@@ -259,17 +256,19 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
   }
 
   if (intent === "projects") {
-    let items = projects;
+    let items = snapshot.projects;
 
     if (companySlug) {
       items = items.filter((project) =>
-        findCompaniesForProject(project.id).some((company) => company.slug === companySlug),
+        findCompaniesForProject(snapshot.companies, project.id).some(
+          (company) => company.slug === companySlug,
+        ),
       );
     }
 
     if (input.technology) {
       items = items.filter((project) =>
-        projectMatchesTechnology(project, input.technology!),
+        projectMatchesTechnology(snapshot, project, input.technology!),
       );
     }
 
@@ -283,7 +282,7 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
       ok: true,
       intent,
       filters: {
-        company: companyFilter && "name" in companyFilter ? companyFilter.name : undefined,
+        company: companyName,
         technology: input.technology,
         focus: input.focus,
         sort: sort === "level" ? "recent" : sort,
@@ -294,14 +293,16 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
         title: project.title,
         meta: project.meta,
         durationLabel: project.durationLabel,
-        companies: findCompaniesForProject(project.id).map((company) => company.name),
+        companies: findCompaniesForProject(snapshot.companies, project.id).map(
+          (company) => company.name,
+        ),
         keywords: project.keywords,
         citation: `project:${project.id}`,
       })),
     };
   }
 
-  const skills = getSkills().items.filter((skill) =>
+  const skills = snapshot.skills.filter((skill) =>
     input.technology ? includesNormalized(skill.name, input.technology) : true,
   );
 
@@ -315,7 +316,7 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
     ok: true,
     intent,
     filters: {
-      company: companyFilter && "name" in companyFilter ? companyFilter.name : undefined,
+      company: companyName,
       technology: input.technology,
       focus: input.focus,
       sort: "level",
@@ -332,4 +333,3 @@ export function queryProfile(input: QueryProfileInput): QueryProfileResult {
     })),
   };
 }
-

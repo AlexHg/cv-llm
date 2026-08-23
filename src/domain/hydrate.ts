@@ -5,8 +5,8 @@ import type {
   CvExperienceSource,
   CvSideProject,
   CvSideProjectSource,
-} from "@/data/types";
-import { formatPeriod, hydrateSpan } from "@/lib/cv-dates";
+} from "@/domain/cv";
+import { formatPeriod, hydrateSpan } from "@/domain/dates";
 
 export function hydrateExperience(job: CvExperienceSource): CvExperience {
   const span = hydrateSpan(job.start, job.end);

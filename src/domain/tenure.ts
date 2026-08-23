@@ -1,7 +1,4 @@
-import {
-  companies,
-  type CompanyProfile,
-} from "@/data/companies";
+import type { CompanyProfile } from "@/domain/company";
 import type {
   CompanyTenure,
   CompanyTenureRole,
@@ -9,10 +6,13 @@ import type {
   CvSideProject,
   ExperienceHighlights,
   RelatedCompanyRef,
-} from "@/data/types";
-import { hydrateSpan, maxDate, minDate } from "@/lib/cv-dates";
+} from "@/domain/cv";
+import { hydrateSpan, maxDate, minDate } from "@/domain/dates";
 
-function relatedRefs(company: CompanyProfile): RelatedCompanyRef[] {
+function relatedRefs(
+  company: CompanyProfile,
+  companies: CompanyProfile[],
+): RelatedCompanyRef[] {
   return (company.relatedSlugs ?? [])
     .map((slug) => companies.find((item) => item.slug === slug))
     .filter((item): item is CompanyProfile => Boolean(item))
@@ -36,6 +36,7 @@ function roleFact(job: CvExperience): CompanyTenureRole {
 function tenureFromJobs(
   company: CompanyProfile,
   jobs: CvExperience[],
+  companies: CompanyProfile[],
 ): CompanyTenure | null {
   if (!jobs.length) return null;
 
@@ -58,13 +59,14 @@ function tenureFromJobs(
       .map(roleFact),
     projectIds: company.collaboration.projectIds,
     group: company.group,
-    related: relatedRefs(company),
+    related: relatedRefs(company, companies),
   };
 }
 
 function tenureFromProjects(
   company: CompanyProfile,
   projects: CvSideProject[],
+  companies: CompanyProfile[],
 ): CompanyTenure | null {
   if (!projects.length) return null;
 
@@ -85,13 +87,14 @@ function tenureFromProjects(
     roles: [],
     projectIds: projects.map((project) => project.id),
     group: company.group,
-    related: relatedRefs(company),
+    related: relatedRefs(company, companies),
   };
 }
 
 export function buildCompanyTenures(
   jobs: CvExperience[],
   projects: CvSideProject[],
+  companies: CompanyProfile[],
 ): CompanyTenure[] {
   const jobsById = new Map(jobs.map((job) => [job.id, job]));
   const projectsById = new Map(projects.map((project) => [project.id, project]));
@@ -103,14 +106,14 @@ export function buildCompanyTenures(
         .filter((job): job is CvExperience => Boolean(job));
 
       if (linkedJobs.length) {
-        return tenureFromJobs(company, linkedJobs);
+        return tenureFromJobs(company, linkedJobs, companies);
       }
 
       const linkedProjects = company.collaboration.projectIds
         .map((id) => projectsById.get(id))
         .filter((project): project is CvSideProject => Boolean(project));
 
-      return tenureFromProjects(company, linkedProjects);
+      return tenureFromProjects(company, linkedProjects, companies);
     })
     .filter((tenure): tenure is CompanyTenure => Boolean(tenure));
 }
@@ -150,13 +153,19 @@ export function pickHighlights(
   return { longestCompany, longestRole };
 }
 
-export function findCompanyForExperience(experienceId: string) {
+export function findCompanyForExperience(
+  companies: CompanyProfile[],
+  experienceId: string,
+) {
   return companies.find((company) =>
     company.collaboration.experienceIds.includes(experienceId),
   );
 }
 
-export function findCompaniesForProject(projectId: string) {
+export function findCompaniesForProject(
+  companies: CompanyProfile[],
+  projectId: string,
+) {
   return companies.filter((company) =>
     company.collaboration.projectIds.includes(projectId),
   );

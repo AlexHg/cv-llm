@@ -1,8 +1,5 @@
-import {
-  companies,
-  listCompanyNames,
-  type CompanyProfile,
-} from "@/data/companies";
+import type { CompanyProfile } from "@/domain/company";
+import { normalize } from "@/domain/text";
 
 export type CompanyLookupResult =
   | { found: true; company: CompanyProfile }
@@ -13,15 +10,6 @@ export type CompanyLookupResult =
       matches?: string[];
     };
 
-function normalize(value: string) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
 function tokens(value: string) {
   return normalize(value).split(" ").filter(Boolean);
 }
@@ -30,19 +18,49 @@ function companyKeys(company: CompanyProfile) {
   return [company.slug, company.name, ...company.aliases].map(normalize);
 }
 
-export function getCompanyBySlug(slug: string) {
+export function listCompanyNames(companies: CompanyProfile[]) {
+  return companies.map((company) => company.name);
+}
+
+export function listCompanySummaries(companies: CompanyProfile[]) {
+  return companies.map((company) => ({
+    slug: company.slug,
+    name: company.name,
+    country: company.country,
+    sector: company.sector,
+  }));
+}
+
+export function listCompanyDirectory(companies: CompanyProfile[]) {
+  return companies.map((company) => ({
+    slug: company.slug,
+    name: company.name,
+    aliases: company.aliases,
+    group: company.group,
+    related: (company.relatedSlugs ?? []).map((slug) => {
+      const related = companies.find((item) => item.slug === slug);
+      return { slug, name: related?.name ?? slug };
+    }),
+  }));
+}
+
+export function getCompanyBySlug(companies: CompanyProfile[], slug: string) {
   const normalized = normalize(slug);
   return companies.find((company) => normalize(company.slug) === normalized);
 }
 
-export function lookupCompany(query: string): CompanyLookupResult {
+export function lookupCompany(
+  companies: CompanyProfile[],
+  query: string,
+): CompanyLookupResult {
   const normalized = normalize(query);
+  const available = listCompanyNames(companies);
 
   if (!normalized) {
     return {
       found: false,
       reason: "empty_query",
-      available: listCompanyNames(),
+      available,
     };
   }
 
@@ -78,22 +96,13 @@ export function lookupCompany(query: string): CompanyLookupResult {
       found: false,
       reason: "ambiguous",
       matches: partial.map((company) => company.name),
-      available: listCompanyNames(),
+      available,
     };
   }
 
   return {
     found: false,
     reason: "not_found",
-    available: listCompanyNames(),
+    available,
   };
-}
-
-export function listCompanySummaries() {
-  return companies.map((company) => ({
-    slug: company.slug,
-    name: company.name,
-    country: company.country,
-    sector: company.sector,
-  }));
 }

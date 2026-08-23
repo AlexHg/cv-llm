@@ -1,7 +1,6 @@
 import { defineTool } from "@copilotkit/runtime/v2";
 import { z } from "zod";
-import { lookupCompany } from "@/lib/lookup-company";
-import { resolveCompanyProfile } from "@/lib/resolve-company";
+import { lookupCompany, resolveCompanyProfile } from "@/application/profile";
 
 export const lookupCompanyTool = defineTool({
   name: "lookup_company",

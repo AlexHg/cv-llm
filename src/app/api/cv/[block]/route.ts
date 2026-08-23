@@ -1,8 +1,7 @@
 import type { NextRequest } from "next/server";
-import { CV_BLOCKS } from "@/data/types";
-import { getCvBlock, parseBlock } from "@/data/resolve-cv";
-import { cvJson, profileFromRequest } from "@/lib/cv-api";
-import { unauthorizedResponse } from "@/lib/internal-auth";
+import { CV_BLOCKS, getCvBlock, parseBlock } from "@/application/cv-blocks";
+import { cvJson, profileFromRequest } from "@/adapters/http/cv-api";
+import { unauthorizedResponse } from "@/adapters/http/auth";
 
 export async function GET(
   request: NextRequest,

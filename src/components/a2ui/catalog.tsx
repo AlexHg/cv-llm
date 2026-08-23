@@ -7,7 +7,7 @@ import {
 } from "@/components/a2ui/definitions";
 import { RadarChart } from "@/components/a2ui/radar-chart";
 import { Timeline } from "@/components/a2ui/timeline";
-import { CV_A2UI_CATALOG_ID } from "@/lib/a2ui-catalog-id";
+import { CV_A2UI_CATALOG_ID } from "@/application/a2ui-catalog";
 
 const renderers: CatalogRenderers<CvA2uiDefinitions> = {
   RadarChart: ({ props }) => <RadarChart {...props} />,

@@ -1,4 +1,4 @@
-import type { CvSkill } from "@/data/types";
+import type { CvSkill } from "@/domain/cv";
 
 export function CvSkillBar({ name, level }: CvSkill) {
   return (

@@ -1,9 +1,10 @@
+import { getProfile } from "@/application/profile";
+import { toPrintView } from "@/application/print";
 import { AgentPanel } from "@/components/agent-panel";
 import { CvPanel } from "@/components/cv/cv-panel";
-import { resolveCv } from "@/data/resolve-cv";
 
 export default function Home() {
-  const cv = resolveCv("cloud");
+  const cv = toPrintView(getProfile());
 
   return (
     <main className="flex h-dvh min-h-0 flex-col lg:flex-row">

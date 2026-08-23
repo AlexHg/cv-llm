@@ -1,10 +1,11 @@
-import type { CompanyProfile } from "@/data/companies";
-import { getExperience } from "@/data/resolve-cv";
+import type { CompanyProfile } from "@/domain/company";
+import type { CompanyTenure } from "@/domain/cv";
 
-export function resolveCompanyProfile(company: CompanyProfile) {
-  const tenure = getExperience().byCompany.find(
-    (item) => item.slug === company.slug,
-  );
+export function resolveCompanyProfile(
+  company: CompanyProfile,
+  tenures: CompanyTenure[],
+) {
+  const tenure = tenures.find((item) => item.slug === company.slug);
 
   return {
     ...company,

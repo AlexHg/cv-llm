@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   renderCareerTimelineSurface,
   renderSkillsRadarSurface,
-} from "@/lib/a2ui-surfaces";
+} from "@/application/a2ui";
 
 export const showSkillsRadarTool = defineTool({
   name: "show_skills_radar",

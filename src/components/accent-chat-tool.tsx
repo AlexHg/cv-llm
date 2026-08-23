@@ -6,7 +6,7 @@ import {
   listAccentNames,
   resolveAccent,
   useAccentColor,
-} from "@/lib/accent";
+} from "@/components/accent";
 
 export function AccentChatTool() {
   const { accent, setAccent } = useAccentColor();

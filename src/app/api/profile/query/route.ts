@@ -1,12 +1,12 @@
 import type { NextRequest } from "next/server";
-import { unauthorizedResponse } from "@/lib/internal-auth";
+import { queryProfile } from "@/application/profile";
+import { unauthorizedResponse } from "@/adapters/http/auth";
 import {
   QUERY_PROFILE_INTENTS,
-  queryProfile,
   type QueryProfileIntent,
   type QueryProfileSort,
-} from "@/lib/query-profile";
-import type { ExperienceFocus } from "@/data/types";
+} from "@/domain/query-profile";
+import type { ExperienceFocus } from "@/domain/cv";
 
 const FOCUSES: ExperienceFocus[] = [
   "technical",

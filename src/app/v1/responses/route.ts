@@ -1,11 +1,11 @@
 import type { NextRequest } from "next/server";
-import { unauthorizedResponse } from "@/lib/internal-auth";
+import { unauthorizedResponse } from "@/adapters/http/auth";
 import {
   forwardOpenResponses,
   openResponsesError,
   openResponsesHeaders,
   prepareOpenResponsesBody,
-} from "@/lib/open-responses";
+} from "@/adapters/http/open-responses";
 
 export const maxDuration = 60;
 

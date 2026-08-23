@@ -1,6 +1,9 @@
 import type { NextRequest } from "next/server";
-import type { CvBlockResponse, ProfileId } from "@/data/types";
-import { parseProfile } from "@/data/resolve-cv";
+import {
+  parseProfile,
+  type CvBlockResponse,
+  type ProfileId,
+} from "@/application/cv-blocks";
 
 export function profileFromRequest(request: NextRequest): ProfileId {
   return parseProfile(request.nextUrl.searchParams.get("profile"));

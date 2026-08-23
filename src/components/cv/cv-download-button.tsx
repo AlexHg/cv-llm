@@ -1,9 +1,9 @@
 "use client";
 
-import type { CvData } from "@/data/types";
-import { usePdfDownload } from "@/lib/use-pdf-download";
+import type { CvPrintView } from "@/application/print";
+import { usePdfDownload } from "@/components/cv/use-pdf-download";
 
-export function CvDownloadButton({ cv }: { cv: CvData }) {
+export function CvDownloadButton({ cv }: { cv: CvPrintView }) {
   const { isGenerating, downloadPDF } = usePdfDownload();
   const filename = `Alejandro-Hernandez-Curriculum-${new Date().toISOString().split("T")[0]}.pdf`;
 

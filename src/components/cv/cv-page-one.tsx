@@ -1,8 +1,8 @@
-import type { CvData } from "@/data/types";
+import type { CvPrintView } from "@/application/print";
 import { CvContactCard } from "./cv-contact-card";
 import { CvExperienceItem } from "./cv-experience-item";
 
-export function CvPageOne({ cv }: { cv: CvData }) {
+export function CvPageOne({ cv }: { cv: CvPrintView }) {
   return (
     <div className="page px-[14mm] pt-[11mm] pb-[10mm] shadow-2xl" id="page1">
       <div className="flex items-start justify-between">
