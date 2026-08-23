@@ -134,7 +134,7 @@ Debe contener, de arriba a abajo:
 
 ### RF-UI-07 — Datos del preview
 
-El preview de `/` SHALL renderizar `resolveCv("cloud")`. El contenido (textos, orden de skills, proyectos) viene del perfil estructurado, no de copy hardcodeado en los componentes de página.
+El preview de `/` SHALL renderizar `toPrintView(getProfile())`. El contenido (textos, orden de skills, proyectos) viene del perfil estructurado, no de copy hardcodeado en los componentes de página.
 
 ## 8. Selector de colores
 
@@ -310,9 +310,9 @@ El panel del agente SHALL envolver cabecera y `CopilotChat` en `CopilotChatConfi
 | RF-UI-04 | `src/app/layout.tsx`, `src/app/globals.css` |
 | RF-UI-05 | `src/components/cv/cv-page-one.tsx`, `cv-contact-card.tsx`, `cv-experience-item.tsx` |
 | RF-UI-06 | `src/components/cv/cv-page-two.tsx`, `cv-skill-bar.tsx`, `cv-side-project.tsx` |
-| RF-UI-07 | `src/app/page.tsx`, `src/data/resolve-cv.ts` |
-| RF-UI-08 … RF-UI-10, RF-UI-15 | `src/components/cv/cv-accent-picker.tsx`, `src/lib/accent.tsx`, `src/components/accent-chat-tool.tsx` |
-| RF-UI-11, RF-UI-12 | `src/components/cv/cv-download-button.tsx`, `src/lib/use-pdf-download.ts` |
+| RF-UI-07 | `src/app/page.tsx`, `src/application/print.ts` |
+| RF-UI-08 … RF-UI-10, RF-UI-15 | `src/components/cv/cv-accent-picker.tsx`, `src/components/accent.tsx`, `src/components/accent-chat-tool.tsx` |
+| RF-UI-11, RF-UI-12 | `src/components/cv/cv-download-button.tsx`, `src/components/cv/use-pdf-download.ts` |
 | RF-UI-13, RF-UI-16 | `src/components/agent-panel.tsx`, `src/components/restart-conversation-button.tsx` |
 | RF-UI-14 | `src/data/chat-suggestions.ts`, `src/components/agent-panel.tsx` |
 | Referencia visual | `.cursor/specs/copilot-ui/curriculum-example.pdf` |

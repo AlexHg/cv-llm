@@ -102,7 +102,7 @@ Las fichas viven en `src/data/companies.ts`. Cada ficha:
 | `collaboration` | Roles e IDs de experience/project. Periodo y duración se derivan |
 | `group`, `relatedSlugs` | Empleadores o clientes distintos (p. ej. Grupo 014). No fusionar permanencia |
 
-El prompt del agente MUST listar solo nombres y aliases, no el `summary`.
+El prompt del canal **chat** MUST listar solo nombres y aliases, no el `summary` (la ficha sale de `lookup_company`). El prompt de **integración** SHALL incluir summary, país y sector porque ese canal no tiene tools (`SPEC-OR-001`).
 
 ### RF-A2-06 — HTTP
 
@@ -125,7 +125,7 @@ La tool MUST:
 
 ### RF-A2-08 — Guardrail de invocación
 
-El prompt SHALL ordenar:
+El prompt del canal **chat** SHALL ordenar:
 
 1. Llamar `lookup_company` **solo** si el usuario pregunta de forma explícita por una empresa u organización concreta (nombre o alias: “qué es X”, “háblame de X”, “en qué consiste X”).
 2. **No** llamarla al listar experiencia, comparar roles, explicar skills o proyectos, ni ante “¿dónde ha trabajado?”, duraciones o “¿dónde duró más?”. Eso es `query_profile` (`SPEC-CV-003`).
@@ -145,7 +145,7 @@ El prompt SHALL ordenar:
 
 | Requisito | Implementación |
 | --- | --- |
-| RF-A2-01 … 03 | `src/components/a2ui/*`, `src/lib/a2ui-surfaces.ts`, `src/lib/a2ui-tools.ts`, `src/components/copilot-provider.tsx`, `src/app/api/copilotkit/[[...slug]]/route.ts` |
+| RF-A2-01 … 03 | `src/components/a2ui/*`, `src/application/a2ui.ts`, `src/adapters/agent/a2ui-tools.ts`, `src/components/copilot-provider.tsx`, `src/adapters/agent/copilot-runtime.ts` |
 | RF-A2-04 | `src/data/chat-suggestions.ts` |
-| RF-A2-05 … 07 | `src/data/companies.ts`, `src/lib/lookup-company.ts`, `src/lib/company-tool.ts`, `src/app/api/companies/**` |
-| RF-A2-08 | `src/lib/cv-prompt.ts` |
+| RF-A2-05 … 07 | `src/data/companies.ts`, `src/domain/lookup-company.ts`, `src/application/profile.ts`, `src/adapters/agent/company-tool.ts`, `src/app/api/companies/**` |
+| RF-A2-08 | `src/application/agent.ts`, `src/application/prompt.ts` |

@@ -105,7 +105,7 @@ Tipos usados: `invalid_request_error`, `server_error`.
 
 ### RF-OR-05 — Instrucciones del agente
 
-Antes de llamar al backend, el servicio SHALL construir `instructions` con `cvToAgentPrompt(resolveCv(profile))`.
+Antes de llamar al backend, el servicio SHALL construir `instructions` con `agentPrompt("integration")` (`SPEC-CV-003`, `SPEC-A2UI-001`). Ese prompt MUST NOT ordenar `query_profile`, `lookup_company` ni superficies A2UI: este canal no expone tools. MUST copiar `period`, `durationLabel` y `highlights` del prompt, e incluir las fichas públicas de empresa (summary, país, sector) porque no hay `lookup_company`.
 
 Si el cliente envía `instructions`, SHALL concatenarse **después** del prompt del CV. El prompt del CV no se sustituye.
 
@@ -113,7 +113,7 @@ El agente MUST usar solo hechos del perfil estructurado (alineado con FR 7 de `.
 
 ### RF-OR-06 — Resolución de perfil
 
-Perfiles válidos: `cloud`, `fullstack`, `techlead`, `genai`, `devops`. Default: `cloud`.
+`ProfileId` (`cloud` \| `fullstack` \| `techlead` \| `genai` \| `devops`) es contrato HTTP. El dominio tiene un solo `Profile`; el id se acepta y se refleja en la respuesta, no cambia el contenido. Default: `cloud`.
 
 Orden de precedencia (el primero válido gana):
 
@@ -179,7 +179,7 @@ Con autenticación válida:
 - `GET /api/cv/{block}` → el bloque pedido, o `404` con la lista de bloques si no existe
 - El listado de bloques incluye `competencies` (`SPEC-CV-002`)
 
-`profile` se lee de `?profile=` (default `cloud`).
+`profile` en el sobre JSON se lee de `?profile=` (default `cloud`). No cambia el documento: hay un solo CV.
 
 ## 7. Requisitos no funcionales
 
@@ -308,11 +308,11 @@ Un revisor puede marcar el feature como cumplido si:
 | Requisito | Implementación |
 | --- | --- |
 | RF-OR-01, 09, 10, 11 | `src/app/v1/responses/route.ts` |
-| RF-OR-02, RNF-OR-01 | `src/lib/internal-auth.ts` |
-| RF-OR-03 … RF-OR-08 | `src/lib/open-responses.ts` |
-| RF-OR-05 (prompt) | `src/lib/cv-prompt.ts`, `src/data/resolve-cv.ts` |
-| RF-OR-12 | `src/app/api/copilotkit/[[...slug]]/route.ts` |
-| RF-OR-13 | `src/app/api/cv/route.ts`, `src/app/api/cv/[block]/route.ts` |
+| RF-OR-02, RNF-OR-01 | `src/adapters/http/auth.ts` |
+| RF-OR-03 … RF-OR-08 | `src/adapters/http/open-responses.ts` |
+| RF-OR-05 (prompt) | `src/application/agent.ts`, `src/application/prompt.ts` |
+| RF-OR-12 | `src/adapters/agent/copilot-runtime.ts` |
+| RF-OR-13 | `src/application/cv-blocks.ts`, `src/app/api/cv/route.ts`, `src/app/api/cv/[block]/route.ts` |
 | RNF-OR-03 (cliente) | `@ai-sdk/open-responses` |
 | Contrato de entorno | `.env.example`, `README.md` |
 

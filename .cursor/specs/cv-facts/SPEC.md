@@ -62,7 +62,9 @@ Cerocatorce (jun 2019 – jul 2024) MUST ganar a Chequemotiva. Welfare MUST ser 
 
 Parámetros: `intent` (`experience` \| `company_tenure` \| `projects` \| `skills`), `company?`, `technology?`, `focus?`, `sort?`.
 
-El prompt SHALL ordenar llamarla para duraciones, comparaciones, filtros y cuando el usuario corrija un hecho. Tras el resultado, copiar `facts`, `notes` y `highlights`.
+El prompt del canal **chat** (`agentPrompt("chat")`) SHALL ordenar llamarla para duraciones, comparaciones, filtros y cuando el usuario corrija un hecho. Tras el resultado, copiar `facts`, `notes` y `highlights`.
+
+El prompt del canal **integración** (`POST /v1/responses`) MUST NOT ordenar `query_profile`: no hay tools. MUST copiar `period`, `durationLabel` y `highlights` ya inyectados.
 
 `BuiltInAgent` MUST usar `maxSteps` > 1 (p. ej. 8). Con el default (`1`) un primer turno que solo llama la tool termina el run sin texto y el chat queda vacío.
 
@@ -87,7 +89,7 @@ El prompt SHALL ordenar llamarla para duraciones, comparaciones, filtros y cuand
 
 | Requisito | Implementación |
 | --- | --- |
-| RF-FA-01 … 02 | `src/lib/cv-dates.ts`, `src/lib/cv-hydrate.ts`, `src/data/cv.ts` |
-| RF-FA-03 … 04 | `src/lib/cv-tenure.ts`, `src/data/companies.ts` |
-| RF-FA-05 … 06 | `src/lib/query-profile.ts`, `src/lib/query-profile-tool.ts`, `src/app/api/profile/query/route.ts` |
-| Prompt | `src/lib/cv-prompt.ts` |
+| RF-FA-01 … 02 | `src/domain/dates.ts`, `src/domain/hydrate.ts`, `src/data/cv.ts` |
+| RF-FA-03 … 04 | `src/domain/tenure.ts`, `src/data/companies.ts` |
+| RF-FA-05 … 06 | `src/domain/query-profile.ts`, `src/application/profile.ts`, `src/adapters/agent/query-profile-tool.ts`, `src/app/api/profile/query/route.ts` |
+| Prompt | `src/application/agent.ts`, `src/application/prompt.ts` |

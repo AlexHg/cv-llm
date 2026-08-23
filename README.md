@@ -52,7 +52,7 @@ curl -s http://localhost:3000/v1/responses \
 
 El perfil se elige con `model` (`cv-cloud`, `cv-fullstack`, `cv-techlead`, `cv-genai`, `cv-devops`), `metadata.profile` o `?profile=cloud`.
 
-La API estructurada del CV (`/api/cv` y `/api/cv/:block`), la de empresas (`/api/companies`, `/api/companies/:slug`) y la de hechos (`/api/profile/query`) usan la misma API key. Las fichas de empresa no van en el prompt: el chat las pide con `lookup_company` solo si el usuario pregunta qué es una empresa. Duraciones, comparaciones y filtros van por `query_profile` (el código calcula las fechas; el modelo no resta).
+La API estructurada del CV (`/api/cv` y `/api/cv/:block`), la de empresas (`/api/companies`, `/api/companies/:slug`) y la de hechos (`/api/profile/query`) usan la misma API key. En el chat, las fichas no van en el prompt: se piden con `lookup_company` solo si el usuario pregunta qué es una empresa. Duraciones y comparaciones van por `query_profile` (el código calcula; el modelo no resta). `POST /v1/responses` no expone tools: el prompt de ese canal incluye las fichas y prohíbe restar fechas.
 
 ## Stack
 

@@ -137,7 +137,7 @@ Campos de impresión existentes MUST seguir presentes (compatibilidad).
 
 ### RF-CV-07 — Prompt
 
-`cvToAgentPrompt` SHALL inyectar posicionamiento, experiencia estructurada, competencias, evidencia de skills y ficha de proyecto.
+`cvToAgentPrompt` SHALL recibir el `Profile` de dominio (no el DTO de impresión) y un conjunto de capacidades por canal (`agentPrompt("chat" | "integration")`). SHALL inyectar posicionamiento, experiencia estructurada, competencias, evidencia de skills y el directorio de empresas. El canal chat no incluye `summary` de empresa; el de integración sí, porque no hay tools.
 
 El prompt SHALL:
 
@@ -163,6 +163,6 @@ El prompt SHALL:
 
 | Requisito | Implementación |
 | --- | --- |
-| RF-CV-01 … 05 | `src/data/types.ts`, `src/data/cv.ts` |
-| RF-CV-06 | `src/data/resolve-cv.ts`, `src/app/api/cv/[block]/route.ts` |
-| RF-CV-07 | `src/lib/cv-prompt.ts` |
+| RF-CV-01 … 05 | `src/domain/cv.ts`, `src/data/cv.ts` |
+| RF-CV-06 | `src/application/profile.ts`, `src/application/cv-blocks.ts`, `src/app/api/cv/[block]/route.ts` |
+| RF-CV-07 | `src/application/prompt.ts` (`Profile`, no DTO HTTP) |
