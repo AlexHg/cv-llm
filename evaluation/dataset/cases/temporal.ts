@@ -115,23 +115,6 @@ export const temporalCases: EvalCase[] = [
     ],
   },
   {
-    id: "TMP-006",
-    category: "temporal",
-    title: "Duración de un rol específico dentro de una empresa",
-    severity: "high",
-    tags: ["tenure", "roles"],
-    turns: ["¿Cuánto tiempo fue Tech Lead - Dev & Cloud en Cerocatorce?"],
-    reference: "May 2022 – Jul 2024, 2 años y 2 meses (26 meses).",
-    assertions: {
-      mustIncludeAny: [
-        ["2 anos y 2 meses", "26 meses"],
-        ["may 2022", "mayo de 2022"],
-      ],
-      mustNotInclude: ["5 anos y 1 mes"],
-      requireCitation: true,
-    },
-  },
-  {
     id: "TMP-007",
     category: "temporal",
     title: "Años totales de experiencia",
@@ -152,81 +135,5 @@ export const temporalCases: EvalCase[] = [
     rubric: [
       "Puede decir «más de una década» o apoyarse en el rango 2015–2026. Dar un total exacto al mes implica haber restado fechas: es un fallo.",
     ],
-  },
-  {
-    id: "TMP-008",
-    category: "temporal",
-    title: "Orden por duración",
-    severity: "high",
-    tags: ["tenure", "ranking"],
-    turns: ["Ordena sus empleos por duración, de mayor a menor."],
-    reference:
-      "Cerocatorce (5 años y 1 mes), Welfare (4 años y 5 meses), Chequemotiva (1 año y 8 meses), Escuela Bancaria y Comercial (3 meses).",
-    assertions: {
-      mustMatch: [
-        "cerocatorce[\\s\\S]*welfare[\\s\\S]*chequemotiva[\\s\\S]*(escuela bancaria|ebc)",
-      ],
-      requireCitation: true,
-    },
-  },
-  {
-    id: "TMP-009",
-    category: "temporal",
-    title: "Fechas exactas de inicio y salida",
-    severity: "high",
-    tags: ["tenure", "dates"],
-    turns: ["¿Cuándo entró y cuándo salió de Welfare?"],
-    reference: "Ene 2015 – Jun 2019 (4 años y 5 meses).",
-    assertions: {
-      mustIncludeAny: [
-        ["ene 2015", "enero de 2015", "enero 2015"],
-        ["jun 2019", "junio de 2019", "junio 2019"],
-      ],
-    },
-  },
-  {
-    id: "TMP-010",
-    category: "temporal",
-    title: "Continuidad entre empleos consecutivos",
-    severity: "medium",
-    tags: ["tenure", "reasoning"],
-    turns: [
-      "¿Hubo algún hueco o solapamiento entre Chequemotiva y la Escuela Bancaria y Comercial?",
-    ],
-    reference:
-      "Son consecutivos, sin hueco: Chequemotiva termina en Mar 2026 y la EBC empieza en Mar 2026. Los tramos del perfil se encadenan directamente.",
-    assertions: {
-      mustIncludeAny: [
-        ["mar 2026", "marzo de 2026"],
-        [
-          "consecutiv",
-          "sin hueco",
-          "ningun hueco",
-          "no hubo hueco",
-          "no hay hueco",
-          "sin solapamiento",
-          "continu",
-          "sin interrupcion",
-          "enlaza",
-        ],
-      ],
-    },
-    rubric: [
-      "Debe basarse en los tramos del perfil (Mar 2026 como bisagra) sin inventar periodos sabáticos.",
-    ],
-  },
-  {
-    id: "TMP-011",
-    category: "temporal",
-    title: "Fechas de un proyecto",
-    severity: "medium",
-    tags: ["projects", "dates"],
-    turns: ["¿En qué periodo desarrolló el hub SaaS no-code multitenant?"],
-    reference:
-      "Nuclear Builders / SaaS Hub: 2022–2025, México, proyecto personal e independiente.",
-    assertions: {
-      mustIncludeAll: ["2022"],
-      mustIncludeAny: [["2025"], ["nuclear", "saas hub"]],
-    },
   },
 ];

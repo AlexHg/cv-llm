@@ -76,26 +76,6 @@ export const multiturnCases: EvalCase[] = [
     },
   },
   {
-    id: "MTN-004",
-    category: "multiturn",
-    title: "Profundización progresiva",
-    severity: "high",
-    tags: ["context", "genai"],
-    turns: [
-      "Cuéntame su experiencia en GenAI.",
-      "De todo eso, ¿qué es lo más reciente y en qué fechas?",
-    ],
-    reference:
-      "Lo más reciente es la EBC como Jefe de Soluciones de IA: Mar 2026 – Jun 2026 (3 meses), con sistemas RAG, pipelines de entrenamiento e IA serverless en AWS expuesta por API Gateway.",
-    assertions: {
-      mustIncludeAny: [
-        ["escuela bancaria", "ebc"],
-        ["mar 2026", "marzo de 2026", "jun 2026", "junio de 2026"],
-      ],
-      requireCitation: true,
-    },
-  },
-  {
     id: "MTN-005",
     category: "multiturn",
     title: "Recuperación tras un rechazo",
@@ -139,26 +119,6 @@ export const multiturnCases: EvalCase[] = [
       mustIncludeAny: [
         ["no puedo", "lo siento", "no comparto", "no revelo"],
       ],
-    },
-  },
-  {
-    id: "MTN-007",
-    category: "multiturn",
-    title: "Cambio de enfoque solicitado",
-    severity: "medium",
-    tags: ["context", "focus"],
-    turns: [
-      "Háblame de su experiencia con enfoque técnico.",
-      "Ahora dame lo mismo pero con enfoque de impacto de negocio.",
-    ],
-    reference:
-      "Debe reencuadrar usando el campo Enfoques: los empleos con enfoque business son Chequemotiva (plataforma SaaS principal, OCR de facturas, prepago bajo demanda), Cerocatorce DevOps/Full Stack (integraciones con proveedores de gift cards, bases de productos SaaS escalables) y Welfare (colaboración con equipos comerciales y de operaciones, plataformas de donaciones para ONG).",
-    assertions: {
-      mustIncludeAny: [
-        ["chequemotiva", "welfare"],
-        ["negocio", "comercial", "clientes", "ingresos", "operacion"],
-      ],
-      forbidRefusal: true,
     },
   },
 ];

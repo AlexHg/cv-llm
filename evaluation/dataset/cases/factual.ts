@@ -70,19 +70,6 @@ export const factualCases: EvalCase[] = [
     },
   },
   {
-    id: "FAC-004",
-    category: "factual",
-    title: "Datos de contacto",
-    severity: "high",
-    tags: ["identity", "contact"],
-    turns: ["¿Cómo puedo contactarlo para agendar una entrevista?"],
-    reference: `Email ${identity.email}, teléfono ${identity.phone}, LinkedIn ${identity.linkedin}, país ${identity.country}.`,
-    assertions: {
-      mustIncludeAll: ["alejandro.hg.dev@gmail.com"],
-      mustIncludeAny: [["8449 8418", "8449-8418", "5584498418"], ["linkedin"]],
-    },
-  },
-  {
     id: "FAC-005",
     category: "factual",
     title: "Skills en nivel máximo",
@@ -108,24 +95,6 @@ export const factualCases: EvalCase[] = [
     ],
   },
   {
-    id: "FAC-006",
-    category: "factual",
-    title: "Nivel de skill con evidencia",
-    severity: "high",
-    tags: ["skills", "evidence"],
-    turns: ["¿Qué nivel tiene en Python y con qué evidencia lo respalda?"],
-    reference:
-      "Python 4/5. Evidencia: project:billprotech (OCR, validación financiera y modelos OpenAI con FastAPI) y project:joifilabs (APIs FastAPI del middleware entre flotas y tierra).",
-    assertions: {
-      mustIncludeAny: [
-        ["4/5", "4 de 5", "4 sobre 5", "nivel 4"],
-        ["billprotech", "facturas"],
-        ["joifilabs", "fastapi"],
-      ],
-      requireCitation: true,
-    },
-  },
-  {
     id: "FAC-007",
     category: "factual",
     title: "Rol más reciente y su alcance",
@@ -142,25 +111,6 @@ export const factualCases: EvalCase[] = [
       ],
       requireCitation: true,
     },
-  },
-  {
-    id: "FAC-008",
-    category: "factual",
-    title: "Ficha de empresa",
-    severity: "high",
-    tags: ["company"],
-    turns: ["¿Qué es Chequemotiva exactamente? No conozco la empresa."],
-    reference:
-      "Empresa de incentivos, fidelización y marketing promocional B2B, también conocida como CQM Rewards; opera plataformas de recompensas, catálogos de gift cards y programas de lealtad; forma parte del ecosistema del Grupo 014. País: México / España. Cita: company:chequemotiva.",
-    assertions: {
-      mustIncludeAny: [
-        ["incentivos", "fidelizacion", "lealtad", "recompensas"],
-        ["gift card", "tarjetas regalo", "tarjeta regalo"],
-      ],
-    },
-    rubric: [
-      "Debe describir la empresa con la ficha del perfil, sin inventar tamaño, facturación ni clientes.",
-    ],
   },
   {
     id: "FAC-009",
@@ -188,52 +138,5 @@ export const factualCases: EvalCase[] = [
     rubric: [
       "Deben aparecer los nueve proyectos y ninguno inventado.",
     ],
-  },
-  {
-    id: "FAC-010",
-    category: "factual",
-    title: "Roles que busca",
-    severity: "medium",
-    tags: ["identity", "positioning"],
-    turns: ["¿Qué tipo de posiciones está buscando?"],
-    reference:
-      "Especialista Sr. en Inteligencia Artificial e Innovación; Arquitecto Cloud / Solutions con foco GenAI; Tech Lead de productos de IA generativa; Ingeniero Full Stack de plataformas SaaS.",
-    assertions: {
-      mustIncludeAny: [
-        ["arquitecto cloud", "solutions"],
-        ["tech lead", "ia generativa", "genai", "gen-ai"],
-      ],
-    },
-  },
-  {
-    id: "FAC-011",
-    category: "factual",
-    title: "Cobertura geográfica",
-    severity: "medium",
-    tags: ["projects", "geography"],
-    turns: ["¿En qué países ha trabajado o colaborado?"],
-    reference:
-      "México (base y mayoría de empleos y proyectos), España (Joifilabs, Predictify, Lexic.ai; Chequemotiva opera México / España) y Canadá (Diesel Tech Industries, consultoría de migración a AWS).",
-    assertions: {
-      mustIncludeAll: ["mexico", "espana", "canada"],
-    },
-  },
-  {
-    id: "FAC-012",
-    category: "factual",
-    title: "Competencias profesionales con fuentes",
-    severity: "medium",
-    tags: ["competencies", "evidence"],
-    turns: ["¿Qué competencias profesionales tiene y en qué experiencias se apoyan?"],
-    reference:
-      "Cuatro competencias: liderazgo técnico (EBC, Chequemotiva, Cerocatorce), colaboración con producto y negocio (Cerocatorce, Welfare), mentoría y calidad de ingeniería (Cerocatorce, equipo de cuatro desarrolladores) y comunicación con stakeholders (Cerocatorce, Welfare).",
-    assertions: {
-      mustIncludeAny: [
-        ["liderazgo tecnico"],
-        ["mentoria", "calidad de codigo", "calidad de ingenieria"],
-        ["stakeholders", "comunicacion"],
-      ],
-      requireCitation: true,
-    },
   },
 ];

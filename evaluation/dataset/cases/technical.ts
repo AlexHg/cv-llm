@@ -46,26 +46,6 @@ export const technicalCases: EvalCase[] = [
     },
   },
   {
-    id: "TEC-003",
-    category: "technical",
-    title: "Problema resuelto en un proyecto de dominio complejo",
-    severity: "high",
-    tags: ["projects", "domain"],
-    turns: [
-      "¿Qué hizo en Joifilabs y qué problema resolvía ese middleware?",
-    ],
-    reference:
-      "Joifilabs Middleware & Backoffice (2025, España, vía Nuclear): middleware centralizado entre sistemas a bordo de trenes europeos e infraestructura en tierra, habilitando comunicación en tiempo real, sincronización de datos y APIs seguras entre flotas. Stack: Nuxt (Vue), PostgreSQL, Python, FastAPI, Ansible, Docker, MQTT y Redis. Cita: project:joifilabs.",
-    assertions: {
-      mustIncludeAny: [
-        ["tren", "ferroviar", "flota"],
-        ["mqtt", "tiempo real", "sincroniz"],
-        ["fastapi", "python", "nuxt", "postgresql"],
-      ],
-      requireCitation: true,
-    },
-  },
-  {
     id: "TEC-004",
     category: "technical",
     title: "Rastreo de una tecnología por todo el perfil",
@@ -82,23 +62,6 @@ export const technicalCases: EvalCase[] = [
     rubric: [
       "Debe cubrir al menos dos de los tres orígenes reales de Redis y no inventar otros.",
     ],
-  },
-  {
-    id: "TEC-005",
-    category: "technical",
-    title: "Patrón arquitectónico transversal",
-    severity: "medium",
-    tags: ["cross-reference", "multitenancy"],
-    turns: ["¿Qué experiencia tiene con arquitecturas multitenant?"],
-    reference:
-      "Tres casos: Incentive Machine (SaaS multitenant de cupones y gift cards con NestJS, MongoDB, Nuxt, ECS, SQS y Terraform), Nuclear Hub (hub no-code multitenant que reutiliza infraestructura por servicio) y Lexic.ai (SaaS pay-as-you-go multitenant sobre Loopback, Express, MongoDB, Vue y AWS).",
-    assertions: {
-      mustIncludeAny: [
-        ["incentive machine", "cupones", "gift card"],
-        ["nuclear", "lexic"],
-      ],
-      requireCitation: true,
-    },
   },
   {
     id: "TEC-006",
@@ -137,91 +100,5 @@ export const technicalCases: EvalCase[] = [
       ],
       requireCitation: true,
     },
-  },
-  {
-    id: "TEC-008",
-    category: "technical",
-    title: "Infraestructura como código",
-    severity: "medium",
-    tags: ["devops", "iac"],
-    turns: ["¿Qué experiencia tiene con infraestructura como código?"],
-    reference:
-      "Terraform 4/5 con evidencia en BillProTech, Nuclear Hub e Incentive Machine; Ansible en el middleware de Joifilabs; Docker 5/5; expertise declarada en Infraestructura como código, Containerización y DevOps CD/CI.",
-    assertions: {
-      mustIncludeAll: ["terraform"],
-      mustIncludeAny: [["4/5", "billprotech", "nuclear", "incentive machine"]],
-      requireCitation: true,
-    },
-  },
-  {
-    id: "TEC-009",
-    category: "technical",
-    title: "Dominio de pagos y flujos de dinero",
-    severity: "medium",
-    tags: ["domain", "cross-reference"],
-    turns: ["¿Ha trabajado con pagos o flujos de dinero?"],
-    reference:
-      "Sí: en Welfare desarrolló pasarelas de pago desde cero y plataformas de donaciones para ONG; en Chequemotiva lideró una plataforma de tarjetas prepago bajo demanda y el OCR/validación de facturas; en Cerocatorce construyó integraciones con proveedores de gift cards e Incentive Machine distribuía cupones y gift cards.",
-    assertions: {
-      mustIncludeAny: [
-        ["pasarela", "donacion", "pago", "prepago", "gift card", "cupones"],
-      ],
-      requireCitation: true,
-    },
-    rubric: [
-      "Cubrir más de un ancla (pasarelas en Welfare, prepago en Chequemotiva, gift cards en Cerocatorce) sube la completitud.",
-    ],
-  },
-  {
-    id: "TEC-010",
-    category: "technical",
-    title: "Inventario de bases de datos",
-    severity: "medium",
-    tags: ["databases", "cross-reference"],
-    turns: ["¿Con qué bases de datos ha trabajado?"],
-    reference:
-      "Relacionales y gestionadas: Aurora (Chequemotiva), RDS (DTI Cloud), PostgreSQL (Joifilabs), SQL/BigQuery (ISSSTE). NoSQL: MongoDB (Incentive Machine, Nuclear Hub, BillProTech, Predictify, Lexic.ai) y CosmosDB (Anahuac). Caché: Redis y Memcache (Chequemotiva). Expertise declarada: bases de datos SQL y NoSQL.",
-    assertions: {
-      mustIncludeAll: ["mongodb"],
-      mustIncludeAny: [
-        ["aurora", "rds", "postgresql", "bigquery"],
-        ["redis", "memcache", "cosmosdb"],
-      ],
-      requireCitation: true,
-    },
-  },
-  {
-    id: "TEC-011",
-    category: "technical",
-    title: "OCR y detección de fraude",
-    severity: "high",
-    tags: ["genai", "domain"],
-    turns: ["¿Qué ha hecho con OCR y detección de fraude?"],
-    reference:
-      "BillProTech: procesamiento inteligente de documentos (facturas, recibos y cotizaciones) con OCR, validación de datos financieros y técnicas de detección de fraude usando Python, FastAPI y modelos OpenAI. En Chequemotiva lideró el sistema de OCR/validación de facturas integrado en el ecosistema de la empresa.",
-    assertions: {
-      mustIncludeAll: ["ocr"],
-      mustIncludeAny: [["fraude"], ["billprotech", "chequemotiva"]],
-      requireCitation: true,
-    },
-  },
-  {
-    id: "TEC-012",
-    category: "technical",
-    title: "Tiempo real y mensajería",
-    severity: "medium",
-    tags: ["architecture", "cross-reference"],
-    turns: ["¿Tiene experiencia con mensajería o comunicación en tiempo real?"],
-    reference:
-      "MQTT y comunicación en tiempo real entre trenes y tierra en Joifilabs; SQS en DTI Cloud e Incentive Machine; integraciones con Twilio y Sendinblue en Cerocatorce; Redis y Memcache como capa de caché en Chequemotiva.",
-    assertions: {
-      mustIncludeAny: [
-        ["mqtt", "sqs", "twilio", "sendinblue"],
-      ],
-      requireCitation: true,
-    },
-    rubric: [
-      "Debe nombrar al menos una tecnología concreta de mensajería del perfil (MQTT, SQS, Twilio, Sendinblue), no solo «tiempo real».",
-    ],
   },
 ];

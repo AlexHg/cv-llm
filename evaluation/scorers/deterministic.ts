@@ -101,7 +101,7 @@ export function runChecks(item: EvalCase, answer: string): CheckResult[] {
 
   if (assertions.requireCitation) {
     // No bloqueante: el system prompt exige citar el origen, pero si un modelo
-    // deja de citar en prosa fallarían ~30 casos por el mismo motivo y el
+    // deja de citar en prosa fallarían muchos casos por el mismo motivo y el
     // informe dejaría de mostrar cualquier otra regresión. Se mide aparte,
     // con su propio control en el gate.
     results.push(

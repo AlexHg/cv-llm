@@ -71,16 +71,16 @@ Categorías y umbrales de pass rate (lo que daña reputación se exige más alto
 
 | Categoría | Prefijo | Casos | Qué mide | Umbral |
 | --- | --- | --- | --- | --- |
-| `factual` | `FAC-` | 12 | Hechos literales del perfil | 85% |
-| `temporal` | `TMP-` | 11 | Fechas, duraciones, permanencia | 90% |
-| `grounding` | `GRD-` | 12 | La respuesta correcta es «eso no consta» | 90% |
-| `recruiter` | `REC-` | 11 | Encaje, pitch y comparaciones sin mentir | 80% |
-| `technical` | `TEC-` | 12 | Arquitecturas y cruces proyecto/skill | 80% |
-| `scope` | `SCP-` | 11 | Rechaza lo ajeno; no rechaza saludos ni peticiones válidas | 90% |
-| `adversarial` | `ADV-` | 10 | Inyección, fuga de instrucciones, fabricación bajo presión | 90% |
-| `multiturn` | `MTN-` | 7 | Arrastre de contexto y resistencia a correcciones falsas | 80% |
+| `factual` | `FAC-` | 6 | Hechos literales del perfil | 85% |
+| `temporal` | `TMP-` | 6 | Fechas, duraciones, permanencia | 90% |
+| `grounding` | `GRD-` | 6 | La respuesta correcta es «eso no consta» | 90% |
+| `recruiter` | `REC-` | 5 | Encaje, pitch y comparaciones sin mentir | 80% |
+| `technical` | `TEC-` | 5 | Arquitecturas y cruces proyecto/skill | 80% |
+| `scope` | `SCP-` | 5 | Rechaza lo ajeno; no rechaza saludos ni peticiones válidas | 90% |
+| `adversarial` | `ADV-` | 5 | Inyección, fuga de instrucciones, fabricación bajo presión | 90% |
+| `multiturn` | `MTN-` | 5 | Arrastre de contexto y resistencia a correcciones falsas | 80% |
 
-Total: **86 casos**. Cada categoría MUST tener al menos 5 casos. Un caso con más de un turno MUST pertenecer a `multiturn`.
+Total: **43 casos**. Cada categoría MUST tener al menos 5 casos. Un caso con más de un turno MUST pertenecer a `multiturn`. Los ids de casos retirados no se reutilizan.
 
 ### RF-EV-03 — Ground truth independiente del código evaluado
 
@@ -226,7 +226,7 @@ El informe SHALL publicar `judgeAgreement`: concordancia entre veredicto del jue
 | --- | --- |
 | RNF-EV-01 | El juez y el target usan keys distintas en espíritu: inbound `INTERNAL_API_KEY`, juez `EVAL_JUDGE_API_KEY` o `OPEN_RESPONSES_API_KEY`. |
 | RNF-EV-02 | Timeout por defecto 90 s (target y juez), 2 reintentos, backoff 800 ms. |
-| RNF-EV-03 | Concurrencia default 4. Coste medido de una corrida completa ≈ 1,5 USD (`gpt-4o-mini` + juez `gpt-4o`). |
+| RNF-EV-03 | Concurrencia default 4. Coste estimado de una corrida completa ≈ 0,75 USD (`gpt-4o-mini` + juez `gpt-4o`). |
 | RNF-EV-04 | `evaluation/results/` no se versiona. No se registran keys. |
 | RNF-EV-05 | Precios de tokens son indicativos (`config.ts`); un modelo desconocido cuenta 0. |
 
@@ -276,7 +276,7 @@ pnpm eval -- --url "$APP_URL" --baseline evaluation/baselines/main.json
 | Evaluar solo integración | Evaluar también el chat | El loop agéntico vive en `BuiltInAgent` y no está expuesto; `targets/` queda listo para un segundo target. |
 | Ground truth a mano | Derivar de `@/application/profile` | Evita tautología: si se rompe el cálculo de fechas, el eval no se rompe con él. |
 | Digest del perfil al juez | Solo la `reference` del caso | Sin digest, el juez marcaba como no fundamentado cualquier detalle correcto omitido en la referencia. |
-| Citas no bloqueantes | Fallar el caso si no cita | ~30 casos exigirían cita; un modelo que deja de citar enmascararía el resto del informe. |
+| Citas no bloqueantes | Fallar el caso si no cita | Varios casos exigirían cita; un modelo que deja de citar enmascararía el resto del informe. |
 | Juez ≠ modelo evaluado | Mismo modelo | Self-preference bias. |
 | Historial en `input` | `previous_response_id` | Los casos de corrección falsa solo tienen sentido con la respuesta real; no depende de persistencia. |
 | `pass^k` para repeats | Mayoría de intentos | Un flaky no es un pass. |
@@ -286,7 +286,7 @@ pnpm eval -- --url "$APP_URL" --baseline evaluation/baselines/main.json
 
 Un revisor puede marcar el feature como cumplido si:
 
-- [ ] `pnpm eval:list` muestra 86 casos, las 8 categorías y al menos 5 por categoría.
+- [ ] `pnpm eval:list` muestra 43 casos, las 8 categorías y al menos 5 por categoría.
 - [ ] `pnpm test` incluye integridad del dataset, deriva del CV vs `GROUND_TRUTH`, digest del juez, scorer determinista (normalización, OR, citas no bloqueantes, rechazo vs saludo) y agregación ponderada de la rúbrica.
 - [ ] `pnpm eval -- --id TMP-001` habla con `POST /v1/responses` autenticado y escribe `run.json`, `report.md`, `traces.jsonl` y `latest.json`.
 - [ ] `pnpm eval:offline` no llama al juez; el caso pasa o falla solo por asserts.

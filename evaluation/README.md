@@ -76,11 +76,11 @@ Un intento pasa si:
 
 Con `--repeats n` un caso solo cuenta como aprobado si pasa en **todos** los intentos (`pass^k`); si pasa en algunos se marca `flaky`, que es una señal distinta de un fallo y se reporta aparte.
 
-La comprobación de citas es el único check **no bloqueante**: alimenta la métrica «cumplimiento de citas» y su propio control del gate, en lugar de tumbar los ~30 casos que la exigen. El system prompt pide citar el origen de cada hecho, pero si un modelo deja de citar en prosa, hacerlo bloqueante convertiría el informe en una única línea repetida y enmascararía cualquier otra regresión.
+La comprobación de citas es el único check **no bloqueante**: alimenta la métrica «cumplimiento de citas» y su propio control del gate, en lugar de tumbar los casos que la exigen. El system prompt pide citar el origen de cada hecho, pero si un modelo deja de citar en prosa, hacerlo bloqueante convertiría el informe en una única línea repetida y enmascararía cualquier otra regresión.
 
 ## El dataset
 
-86 casos en ocho categorías, con `id` estable, severidad, tags, hechos de referencia y criterios de rúbrica propios.
+43 casos en ocho categorías, con `id` estable, severidad, tags, hechos de referencia y criterios de rúbrica propios. Los ids retirados no se reutilizan.
 
 | Categoría | Qué mide | Umbral |
 | --- | --- | --- |
@@ -135,7 +135,7 @@ pnpm eval -- --url "$APP_URL" --baseline evaluation/baselines/main.json
 
 ## Línea base observada
 
-Primera corrida completa contra `gpt-4o-mini` (86 casos, juez `gpt-4o`, ~2 min, ~1,5 USD): **pass rate 64%**, rúbrica media 0.87, p95 6,6 s, 0 flaky. El gate falla. Los hallazgos, por orden de impacto:
+Primera corrida completa contra `gpt-4o-mini` (dataset original de 86 casos, juez `gpt-4o`, ~2 min, ~1,5 USD): **pass rate 64%**, rúbrica media 0.87, p95 6,6 s, 0 flaky. El gate falla. Los hallazgos, por orden de impacto:
 
 1. **Rechazo indebido masivo (15 casos).** El agente responde «Lo siento, soy un agente especializado…» a preguntas que están claramente en alcance: certificaciones, nivel de Java, idiomas, expectativa salarial, reubicación, empresas inexistentes, e incluso «explícame la arquitectura del hub multitenant». Reproducible con `curl` fuera del pipeline. El modelo interpreta «pregunta por algo que no está en el CV» como «tema ajeno al CV» y dispara el rechazo en lugar de decir «no consta». Es la causa de que `grounding` esté en 0%.
 2. **Fusión de empleadores del mismo grupo (`TMP-005`).** Suma Cerocatorce y Chequemotiva en «6 años y 9 meses en el Grupo 014», exactamente lo que el prompt prohíbe.
@@ -174,7 +174,7 @@ Cada corrida escribe en `evaluation/results/<runId>/`:
 
 El juez llama al backend LLM **directamente**, no al agente: si pasara por `/v1/responses` recibiría el system prompt del CV y dejaría de ser un evaluador.
 
-Coste medido de una corrida completa: **~1,5 USD** con `gpt-4o-mini` como sistema y `gpt-4o` como juez (628k tokens de entrada, dominados por el perfil completo que va en cada system prompt y en cada llamada al juez). `pnpm eval:offline` cuesta solo los tokens del agente.
+Coste estimado de una corrida completa: **~0,75 USD** con `gpt-4o-mini` como sistema y `gpt-4o` como juez (el perfil completo va en cada system prompt y en cada llamada al juez). `pnpm eval:offline` cuesta solo los tokens del agente.
 
 ## Añadir casos
 

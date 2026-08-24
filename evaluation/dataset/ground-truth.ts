@@ -8,7 +8,7 @@
  * y falla si divergen, así que un cambio de CV obliga a revisar el dataset.
  */
 
-export const DATASET_VERSION = "2026.08.1";
+export const DATASET_VERSION = "2026.08.2";
 
 export interface TenureFact {
   slug: string;
