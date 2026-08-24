@@ -7,7 +7,13 @@ import type {
   ExperienceHighlights,
   RelatedCompanyRef,
 } from "@/domain/cv";
-import { hydrateSpan, maxDate, minDate } from "@/domain/dates";
+import {
+  dateIndex,
+  formatPeriod,
+  hydrateSpan,
+  maxDate,
+  minDate,
+} from "@/domain/dates";
 
 function relatedRefs(
   company: CompanyProfile,
@@ -151,6 +157,77 @@ export function pickHighlights(
   );
 
   return { longestCompany, longestRole };
+}
+
+/**
+ * Extremos de la trayectoria laboral. Existe para que nadie tenga que restar
+ * fechas cuando preguntan «cuántos años de experiencia tiene»: el rango sale
+ * del primer inicio y del último fin que constan, sin total agregado.
+ */
+export type TenureRelation = "consecutive" | "gap" | "overlap";
+
+export interface EmploymentTransition {
+  from: string;
+  to: string;
+  fromPeriod: string;
+  toPeriod: string;
+  hinge: string;
+  relation: TenureRelation;
+  note: string;
+}
+
+/**
+ * Relación entre empleos consecutivos en el calendario. A granularidad de mes,
+ * si uno termina en el mismo mes (o el mes anterior) en que empieza el siguiente
+ * no hay hueco ni solapamiento: es un relevo. El modelo, sin esto, interpreta
+ * «Mar 2026 – Mar 2026» como un mes entero compartido.
+ */
+export function employmentTransitions(
+  tenures: CompanyTenure[],
+): EmploymentTransition[] {
+  const employed = [...employmentTenures(tenures)].sort(
+    (left, right) => dateIndex(left.start, "start") - dateIndex(right.start, "start"),
+  );
+
+  const transitions: EmploymentTransition[] = [];
+  for (let i = 0; i < employed.length - 1; i++) {
+    const from = employed[i];
+    const to = employed[i + 1];
+    const delta = dateIndex(to.start, "start") - dateIndex(from.end, "end");
+    const relation: TenureRelation =
+      delta < 0 ? "overlap" : delta <= 1 ? "consecutive" : "gap";
+    const hinge = from.period.includes("–")
+      ? from.period.split("–").pop()!.trim()
+      : from.period;
+    const note =
+      relation === "consecutive"
+        ? `sin hueco y sin solapamiento; bisagra ${hinge}`
+        : relation === "gap"
+          ? "hay un hueco entre el fin de uno y el inicio del otro"
+          : "se solapan: el segundo empieza antes de que termine el primero";
+
+    transitions.push({
+      from: from.name,
+      to: to.name,
+      fromPeriod: from.period,
+      toPeriod: to.period,
+      hinge,
+      relation,
+      note,
+    });
+  }
+
+  return transitions;
+}
+
+export function careerSpan(tenures: CompanyTenure[]) {
+  const employed = employmentTenures(tenures);
+  if (!employed.length) return null;
+
+  const start = employed.reduce((first, tenure) => minDate(first, tenure.start), employed[0].start);
+  const end = employed.reduce((last, tenure) => maxDate(last, tenure.end), employed[0].end);
+
+  return { start, end, period: formatPeriod(start, end) };
 }
 
 export function findCompanyForExperience(

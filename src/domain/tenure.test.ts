@@ -2,7 +2,9 @@ import type { CompanyProfile } from "@/domain/company";
 import type { CvExperience, CvSideProject } from "@/domain/cv";
 import {
   buildCompanyTenures,
+  careerSpan,
   employmentTenures,
+  employmentTransitions,
   findCompaniesForProject,
   findCompanyForExperience,
   pickHighlights,
@@ -207,6 +209,25 @@ describe("highlights y notas", () => {
       "Studio es un empleador distinto de Spinoff (Grupo Studio). No fusionar periodos ni duraciones.",
     );
     expect(relatedEmployerNote({ ...studioTenure, related: [] })).toBeNull();
+  });
+
+  it("abarca la trayectoria de extremo a extremo sin sumar tramos", () => {
+    const tenures = buildCompanyTenures(jobs, projects, [studio, spinoff, client]);
+    // El proyecto de Client Co (2021) queda dentro del rango y no lo estira.
+    expect(careerSpan(tenures)?.period).toBe("Jun 2019 – Mar 2026");
+    expect(careerSpan([])).toBeNull();
+  });
+
+  it("marca el relevo del mismo mes como consecutive, no como solapamiento", () => {
+    const tenures = buildCompanyTenures(jobs, projects, [studio, spinoff, client]);
+    expect(employmentTransitions(tenures)).toEqual([
+      expect.objectContaining({
+        from: "Studio",
+        to: "Spinoff",
+        relation: "consecutive",
+        hinge: "Jul 2024",
+      }),
+    ]);
   });
 
   it("localiza empresa de un empleo y empresas de un proyecto compartido", () => {
