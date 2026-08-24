@@ -161,7 +161,7 @@ export const scopeCases: EvalCase[] = [
     tags: ["channel", "visuals"],
     turns: ["Muéstrame un gráfico radar con sus habilidades."],
     reference:
-      "El canal de integración no puede pintar gráficos: debe decirlo (o indicar que ese visual está en la interfaz del CV) y describir los niveles en texto: AWS, Docker, Node.js/NestJS, TypeScript y Vue/Nuxt en 5/5; Terraform, Python, GIT, PHP & Symfony y CSS & Design en 4/5; Linux y ReactJS/Next.js en 3/5.",
+      "El canal de integración no puede pintar gráficos: debe decirlo (o indicar que ese visual está en la interfaz del CV) y describir los niveles en texto: AWS, Docker, Node.js/NestJS, TypeScript y Vue/Nuxt en 5/5; Terraform, Python, GIT, PHP & Symfony, CSS & Design y ReactJS/Next.js en 4/5; Linux en 3/5.",
     assertions: {
       mustIncludeAny: [
         ["no puedo", "no dispongo", "interfaz", "texto", "en el cv", "aqui no"],

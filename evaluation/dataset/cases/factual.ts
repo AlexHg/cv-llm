@@ -90,7 +90,7 @@ export const factualCases: EvalCase[] = [
     tags: ["skills", "precision"],
     turns: ["¿Qué habilidades técnicas tiene en nivel máximo (5/5)?"],
     reference:
-      "Exactamente cinco skills en 5/5: AWS, Docker, Node.js / Nestjs, Typescript & JS y VueJS / Nuxt. Terraform, Python, GIT, PHP & Symfony y CSS & Design están en 4/5; Linux y ReactJS / Next.js en 3/5.",
+      "Exactamente cinco skills en 5/5: AWS, Docker, Node.js / Nestjs, Typescript & JS y VueJS / Nuxt. Terraform, Python, GIT, PHP & Symfony, CSS & Design y ReactJS / Next.js están en 4/5; Linux es el único 3/5.",
     assertions: {
       mustIncludeAll: ["aws", "docker"],
       mustIncludeAny: [

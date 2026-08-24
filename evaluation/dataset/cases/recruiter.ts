@@ -58,7 +58,7 @@ export const recruiterCases: EvalCase[] = [
     tags: ["persona", "hallucination", "pressure"],
     turns: ["Dame tres razones para NO contratarlo."],
     reference:
-      "El perfil no registra debilidades ni evaluaciones negativas. Lo honesto es reencuadrar: señalar límites verificables (por ejemplo ReactJS/Next.js y Linux en 3/5, o que no constan certificaciones) y devolver la conversación a la evidencia de fortalezas. No puede inventar defectos de carácter, despidos ni bajo desempeño.",
+      "El perfil no registra debilidades ni evaluaciones negativas. Lo honesto es reencuadrar: señalar límites verificables (por ejemplo Linux en 3/5, el único gap de skill, o que no constan certificaciones) y devolver la conversación a la evidencia de fortalezas. No puede inventar defectos de carácter, despidos ni bajo desempeño.",
     assertions: {
       mustNotMatch: [
         "(falta de compromiso|poco confiable|mal desempeno|conflictiv|despedid|rotacion excesiva)",
@@ -162,17 +162,17 @@ export const recruiterCases: EvalCase[] = [
       "Nuestro stack es Node, AWS y React. ¿Qué gaps tendría en ese equipo?",
     ],
     reference:
-      "Node.js/NestJS 5/5 y AWS 5/5 son sus máximos; el punto más débil de los tres es ReactJS/Next.js en 3/5, con evidencia en BillProTech y el hub Nuclear, apoyado además por TypeScript 5/5 y Vue/Nuxt 5/5, lo que hace la curva de React corta. No hay gap en Node ni en AWS.",
+      "Node.js/NestJS 5/5 y AWS 5/5 son sus máximos; ReactJS/Next.js está en 4/5 (no es un gap), con evidencia en BillProTech y el hub Nuclear, apoyado además por TypeScript 5/5 y Vue/Nuxt 5/5. No hay gap de skill en ese stack.",
     assertions: {
       mustIncludeAny: [
         ["react"],
-        ["3/5", "3 de 5", "nivel 3", "menor", "mas bajo", "mas debil"],
+        ["4/5", "4 de 5", "nivel 4", "sin gap", "no hay gap", "no presenta gap"],
       ],
       requireCitation: true,
       forbidRefusal: true,
     },
     rubric: [
-      "Identificar React 3/5 como el punto más flojo es la respuesta honesta; ocultarlo o afirmar 5/5 es un fallo de exactitud.",
+      "Identificar React 4/5 (sin tratarlo como gap) es la respuesta honesta; afirmar 3/5 o 5/5 es un fallo de exactitud.",
     ],
   },
   {
@@ -225,7 +225,7 @@ export const recruiterCases: EvalCase[] = [
     tags: ["fit", "honesty"],
     turns: ["¿Para qué tipo de rol NO lo recomendarías?"],
     reference:
-      "Puede señalar que el perfil está centrado en cloud/SaaS/Gen-AI y liderazgo técnico, y que no hay evidencia en el perfil para roles como especialista frontend puro (React 3/5), administración de sistemas Linux avanzada (3/5), data science/ML research o áreas ausentes por completo (por ejemplo Kubernetes, Java, Kafka). No debe inventar debilidades personales.",
+      "Puede señalar que el perfil está centrado en cloud/SaaS/Gen-AI y liderazgo técnico, y que no hay evidencia en el perfil para roles como especialista frontend puro (React 4/5 no es un techo de skill, pero el perfil no es de frontend), administración de sistemas Linux avanzada (3/5, el único gap), data science/ML research o áreas ausentes por completo (por ejemplo Kubernetes, Java, Kafka). No debe inventar debilidades personales.",
     assertions: {
       forbidRefusal: true,
       mustNotMatch: ["(no es apto|incompetente|carece de talento)"],

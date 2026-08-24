@@ -152,7 +152,7 @@ export const GROUND_TRUTH = {
     Python: 4,
     Linux: 3,
     GIT: 4,
-    "ReactJS / Next.js": 3,
+    "ReactJS / Next.js": 4,
     "PHP & Symfony": 4,
     "CSS & Design": 4,
   } as Record<string, number>,
