@@ -45,12 +45,12 @@ curl -s http://localhost:3000/v1/responses \
   -H "Authorization: Bearer $INTERNAL_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "cv-cloud",
+    "model": "cv",
     "input": "¿Qué experiencia tiene Alejandro en cloud?"
   }'
 ```
 
-El perfil se elige con `model` (`cv-cloud`, `cv-fullstack`, `cv-techlead`, `cv-genai`, `cv-devops`), `metadata.profile` o `?profile=cloud`.
+Hay un solo CV. `model` es opcional: `cv`, ausente o un alias `cv-*` usan `OPEN_RESPONSES_MODEL`.
 
 La API estructurada del CV (`/api/cv` y `/api/cv/:block`), la de empresas (`/api/companies`, `/api/companies/:slug`) y la de hechos (`/api/profile/query`) usan la misma API key. En el chat, las fichas no van en el prompt: se piden con `lookup_company` solo si el usuario pregunta qué es una empresa. Duraciones y comparaciones van por `query_profile` (el código calcula; el modelo no resta). `POST /v1/responses` no expone tools: el prompt de ese canal incluye las fichas y prohíbe restar fechas.
 

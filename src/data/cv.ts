@@ -407,7 +407,7 @@ export const cvBase: CvBase = {
     },
     {
       name: "ReactJS / Next.js",
-      level: 3,
+      level: 4,
       evidence: [
         {
           kind: "project",
