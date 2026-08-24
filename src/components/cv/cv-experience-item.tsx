@@ -1,13 +1,23 @@
+import {
+  citeTargetClass,
+  useCited,
+} from "@/components/citation/citation-highlight";
 import type { CvExperience } from "@/domain/cv";
 
 export function CvExperienceItem({
+  id,
   title,
   company,
   period,
   description,
 }: CvExperience) {
+  const cite = `experience:${id}`;
+
   return (
-    <div className="relative pl-7">
+    <div
+      data-cite={cite}
+      className={`relative pl-7 ${citeTargetClass(useCited(cite))}`}
+    >
       <span className="absolute top-[0px] left-0 mt-1.5 h-[9px] w-[9px] rounded-full bg-mustard" />
       <h3 className="font-head text-[13px] font-bold text-ink">{title}</h3>
       <p className="mt-1 text-[12px]">

@@ -5,7 +5,9 @@ import {
   CopilotChatConfigurationProvider,
   useConfigureSuggestions,
 } from "@copilotkit/react-core/v2";
+import { useRef } from "react";
 import { AccentChatTool } from "@/components/accent-chat-tool";
+import { CitationLayer } from "@/components/citation/citation-layer";
 import { RestartConversationButton } from "@/components/restart-conversation-button";
 import {
   chatSuggestions,
@@ -18,10 +20,14 @@ const suggestionsConfig = {
 };
 
 export function AgentPanel() {
+  const rootRef = useRef<HTMLElement>(null);
   useConfigureSuggestions(suggestionsConfig);
 
   return (
-    <aside className="flex h-[50vh] min-h-0 w-full shrink-0 flex-col border-t border-zinc-300 bg-white lg:h-full lg:w-[640px] lg:border-t-0 lg:border-l lg:border-black/25">
+    <aside
+      ref={rootRef}
+      className="flex h-[50vh] min-h-0 w-full shrink-0 flex-col border-t border-zinc-300 bg-white lg:h-full lg:w-[640px] lg:border-t-0 lg:border-l lg:border-black/25"
+    >
       <AccentChatTool />
       <CopilotChatConfigurationProvider>
         <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-black/40 bg-ink px-4">
@@ -44,6 +50,7 @@ export function AgentPanel() {
             chatInputPlaceholder: "Escribe tu pregunta...",
           }}
         />
+        <CitationLayer rootRef={rootRef} />
       </CopilotChatConfigurationProvider>
     </aside>
   );

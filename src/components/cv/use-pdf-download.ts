@@ -46,6 +46,9 @@ export function usePdfDownload() {
         clone.style.transform = "none";
         clone.style.width = `${PAGE_WIDTH}px`;
         clone.style.height = `${PAGE_HEIGHT}px`;
+        clone
+          .querySelectorAll(".cv-cite-active")
+          .forEach((el) => el.classList.remove("cv-cite-active"));
         host.appendChild(clone);
       }
 

@@ -38,6 +38,36 @@ body {
   background-size: 18px 18px;
 }
 
+.cv-cite-target {
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.cv-cite-active {
+  background-color: color-mix(in srgb, var(--cv-accent) 22%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cv-accent) 55%, transparent);
+  border-radius: 4px;
+}
+
+.cv-cite-link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cv-accent);
+  font: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.cv-cite-link:hover {
+  color: var(--color-ink);
+}
+
 @media print {
   body {
     background: #fff;
@@ -52,5 +82,10 @@ body {
     margin: 0 !important;
     width: 210mm;
     height: 297mm;
+  }
+
+  .cv-cite-active {
+    background: transparent;
+    box-shadow: none;
   }
 }

@@ -1,12 +1,21 @@
 import type { CvPrintView } from "@/application/print";
+import {
+  citeTargetClass,
+  useCited,
+} from "@/components/citation/citation-highlight";
 import { CvContactCard } from "./cv-contact-card";
 import { CvExperienceItem } from "./cv-experience-item";
 
 export function CvPageOne({ cv }: { cv: CvPrintView }) {
+  const identityClass = citeTargetClass(useCited("identity"));
+
   return (
     <div className="page px-[14mm] pt-[11mm] pb-[10mm] shadow-2xl" id="page1">
       <div className="flex items-start justify-between">
-        <div className="min-w-0 flex-1 pt-4 pr-[8mm]">
+        <div
+          data-cite="identity"
+          className={`min-w-0 flex-1 pt-4 pr-[8mm] ${identityClass}`}
+        >
           <h1 className="font-head text-[40px] leading-[1.05] text-ink">
             <span className="font-light">{cv.firstName}</span>
             <br />
@@ -30,7 +39,7 @@ export function CvPageOne({ cv }: { cv: CvPrintView }) {
       </div>
 
       <div className="mt-4 grid grid-cols-[1fr_62mm] gap-x-[10mm]">
-        <div>
+        <div data-cite="identity" className={identityClass}>
           <h2 className="font-head text-[19px] font-bold tracking-[0.18em] text-ink">
             {cv.labels.about}
           </h2>
@@ -40,7 +49,10 @@ export function CvPageOne({ cv }: { cv: CvPrintView }) {
           />
         </div>
 
-        <div className="flex flex-col gap-[4px]">
+        <div
+          data-cite="identity"
+          className={`flex flex-col gap-[4px] ${identityClass}`}
+        >
           {cv.contact.map((item) => (
             <CvContactCard key={item.type} {...item} />
           ))}

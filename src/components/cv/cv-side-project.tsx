@@ -1,3 +1,7 @@
+import {
+  citeTargetClass,
+  useCited,
+} from "@/components/citation/citation-highlight";
 import type { CvSideProject } from "@/domain/cv";
 
 type CvSideProjectProps = CvSideProject & {
@@ -5,14 +9,17 @@ type CvSideProjectProps = CvSideProject & {
 };
 
 export function CvSideProject({
+  id,
   title,
   meta,
   description,
   keywords,
   keywordsLabel,
 }: CvSideProjectProps) {
+  const cite = `project:${id}`;
+
   return (
-    <div>
+    <div data-cite={cite} className={citeTargetClass(useCited(cite))}>
       <h3 className="text-[12px] leading-[1.3]">
         <span className="font-head font-bold text-ink">{title} &nbsp;</span>
         <span className="tracking-[0.04em] text-soft"> {meta}</span>

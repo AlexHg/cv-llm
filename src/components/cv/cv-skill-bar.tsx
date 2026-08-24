@@ -1,8 +1,18 @@
+import {
+  citeTargetClass,
+  useCited,
+} from "@/components/citation/citation-highlight";
+import { skillCiteKey } from "@/domain/citation";
 import type { CvSkill } from "@/domain/cv";
 
 export function CvSkillBar({ name, level }: CvSkill) {
+  const cite = skillCiteKey(name);
+
   return (
-    <div className="flex items-center justify-between">
+    <div
+      data-cite={cite}
+      className={`flex items-center justify-between ${citeTargetClass(useCited(cite))}`}
+    >
       <span className="flex items-center gap-3 text-[11.5px] tracking-[0.08em] text-soft">
         <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-body" />
         <span className="mt-0">{name}</span>
