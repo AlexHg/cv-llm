@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { agentPrompt } from "@/application/agent";
 import { getProfile, getProfileSnapshot } from "@/application/profile";
 import { toPrintView } from "@/application/print";
@@ -151,6 +152,12 @@ describe("prompt por canal", () => {
     expect(prompt).toContain("Herramienta lookup_company");
     expect(prompt).toContain("Soy tu asistente de currículum");
     expect(prompt).toContain("Un saludo solo NUNCA usa este mensaje de rechazo");
+    expect(prompt).toContain(
+      "Antes de rechazar, busca el mensaje en títulos, aliases y stacks",
+    );
+    expect(prompt).toContain("Nuclear Builders / SaaS Hub");
+    expect(prompt).toContain("Está prohibido negar un miembro de una familia");
+    expect(prompt).toContain("project:anahuac");
     expect(prompt).toContain("show_skills_radar");
     expect(prompt).not.toContain("también conocida como CQM Rewards");
     expect(profile.experience.every((job) => job.period && job.durationLabel)).toBe(
@@ -168,6 +175,22 @@ describe("prompt por canal", () => {
     expect(prompt).not.toContain("Herramienta lookup_company");
     expect(prompt).not.toContain("llama a show_skills_radar");
     expect(prompt).not.toContain("llama a set_accent_color");
+  });
+
+  it("las reglas estáticas no incrustan hechos del CV", () => {
+    const source = readFileSync(new URL("./prompt.ts", import.meta.url), "utf8");
+    for (const leak of [
+      "Cerocatorce",
+      "Chequemotiva",
+      "BillProTech",
+      "project:anahuac",
+      "project:nuclear-hub",
+      "project:issste",
+      "cuatro desarrolladores",
+      "Jefe de Soluciones",
+    ]) {
+      expect(source).not.toContain(leak);
+    }
   });
 
   it("mantiene el prompt por debajo de un presupuesto de caracteres", () => {
