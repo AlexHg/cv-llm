@@ -33,7 +33,7 @@ export const technicalCases: EvalCase[] = [
     title: "Arquitectura multitenant del hub",
     severity: "high",
     tags: ["projects", "architecture", "multitenancy"],
-    turns: ["Explícame la arquitectura del hub SaaS no-code multitenant."],
+    turns: ["Explícame la arquitectura de su hub SaaS no-code multitenant."],
     reference:
       "Nuclear Builders / SaaS Hub (2022–2025, proyecto independiente): plataforma no-code multitenant que genera aplicaciones personalizables reutilizando la misma infraestructura por cada servicio creado. Stack: NestJS (Node.js), MongoDB, Next.js (React), AWS, microservicios, Redis, Terraform, Gen-AI y prompt engineering. Cita: project:nuclear-hub.",
     assertions: {

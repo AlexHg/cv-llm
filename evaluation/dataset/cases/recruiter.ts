@@ -109,7 +109,7 @@ export const recruiterCases: EvalCase[] = [
       mustNotMatch: [
         "(alejandro|el candidato|su perfil|su experiencia)[^.\\n]{0,60}kubernetes",
       ],
-      mustIncludeAny: [["docker", "ecs", "serverless", "contenedor"]],
+      mustIncludeAny: [["aws", "cloud", "saas", "ia", "genai", "gen-ai"]],
       forbidRefusal: true,
     },
     rubric: [

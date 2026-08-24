@@ -110,6 +110,14 @@ describe("familias tecnológicas", () => {
     }
   });
 
+  it("cierra el inventario de GenAI y documentos", () => {
+    const family = groupTechnologyFamilies(index).find(
+      (item) => item.name === "GenAI y documentos",
+    );
+    const names = family?.members.map((item) => item.name.toLowerCase()) ?? [];
+    expect(names).toEqual(expect.arrayContaining(["rag", "ocr", "gen-ai"]));
+  });
+
   it("no mete nubes en la familia de bases de datos", () => {
     const family = groupTechnologyFamilies(index).find(
       (item) => item.name === "Bases de datos y caché",

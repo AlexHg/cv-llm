@@ -240,6 +240,10 @@ const FAMILY_KEYS: { name: string; keys: string[] }[] = [
     name: "Nubes",
     keys: ["aws", "azure", "gcp"],
   },
+  {
+    name: "GenAI y documentos",
+    keys: ["rag", "gen-ai", "ocr"],
+  },
 ];
 
 export function groupTechnologyFamilies(
