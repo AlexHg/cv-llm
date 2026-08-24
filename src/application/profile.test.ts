@@ -169,6 +169,14 @@ describe("prompt por canal", () => {
     expect(prompt).not.toContain("llama a show_skills_radar");
     expect(prompt).not.toContain("llama a set_accent_color");
   });
+
+  it("mantiene el prompt por debajo de un presupuesto de caracteres", () => {
+    const chat = agentPrompt("chat");
+    const integration = agentPrompt("integration");
+    // Antes de compactar: chat ~45k, integration ~48k. Cada k extra alarga el TTFT.
+    expect(chat.length).toBeLessThan(33_000);
+    expect(integration.length).toBeLessThan(36_000);
+  });
 });
 
 describe("vista de impresión vs dominio", () => {
