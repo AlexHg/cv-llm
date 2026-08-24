@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# resultados de evaluación (artefactos de corridas)
+/evaluation/results/
