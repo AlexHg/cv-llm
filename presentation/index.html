@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curriculum AI — Agente de currículum</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./css/banorte.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section
+          id="cover"
+          class="section-divider"
+          data-state="is-section-divider"
+        >
+          <div class="brand-mark">
+            <span class="logo"
+              ><img
+                src="./icon.webp"
+                alt="Curriculum AI"
+                style="width: 40px; height: 40px"
+            /></span>
+            <span class="wordmark">Reto IA · Banorte</span>
+          </div>
+          <h1>
+            Curriculum AI<br />
+            <small style="font-size: 44pt">Agente inteligente</small>
+          </h1>
+          <p style="max-width: 820px; margin-top: 18px">
+            Conversa con el perfil de los candidatos de manera inteligente y
+            natural.
+          </p>
+          <div
+            style="display: flex; gap: 14px; margin-top: 30px; flex-wrap: wrap"
+          >
+            <span
+              class="badge matched"
+              style="background: rgba(16, 185, 129, 0.18); color: #6ee7b7"
+              >Visualización</span
+            >
+            <span
+              class="badge review"
+              style="background: rgba(245, 158, 11, 0.18); color: #fcd34d"
+              >Chat embebido</span
+            >
+            <span
+              class="badge partial"
+              style="background: rgba(239, 41, 69, 0.22); color: #f7a8b3"
+              >Open Responses</span
+            >
+          </div>
+          <p
+            class="text-sm"
+            style="
+              position: absolute;
+              bottom: 40px;
+              left: 64px;
+              color: rgba(255, 255, 255, 0.55) !important;
+            "
+          >
+            Alejandro Hernández — Next.js · CopilotKit · LangChain · Open
+            Responses · Vitest
+          </p>
+        </section>
+
+        <section id="problema">
+          <p class="eyebrow">01 — Requerimientos funcionales</p>
+          <h2>Qué debe hacer el agente</h2>
+          <div class="content">
+            <p class="text-lg text-muted" style="margin-top: -6px">
+              Conversar sobre el perfil con hechos del CV. Si no consta, lo
+              dice. Si está fuera de alcance, redirige.
+            </p>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+                margin-top: 8px;
+              "
+            >
+              <div class="card">
+                <div class="card-icon">
+                  <i class="fa-solid fa-comments"></i>
+                </div>
+                <h3>Conversar el perfil</h3>
+                <p class="text-muted">
+                  Experiencia, skills y proyectos. Sigue el hilo y adapta el
+                  enfoque: técnico, entrevista o negocio.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card-icon amber">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3>Hechos, no invención</h3>
+                <p class="text-muted">
+                  Una fuente estructurada. Cita el origen. Las duraciones las
+                  calcula el código.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card-icon sky">
+                  <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3>Solo el perfil</h3>
+                <p class="text-muted">
+                  Tools si aportan valor. Off-topic: no responde ni llama tools;
+                  disculpa y redirige.
+                </p>
+              </div>
+            </div>
+            <blockquote style="margin-top: 22px">
+              <p>
+                La prioridad es un agente
+                <strong>funcional, confiable y bien pensado</strong> — no solo
+                una interfaz atractiva.
+              </p>
+            </blockquote>
+          </div>
+        </section>
+
+        <section id="objetivos">
+          <p class="eyebrow">02 — Norte del proyecto</p>
+          <h2>Objetivos</h2>
+          <div class="content">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1.15fr 1fr;
+                gap: 24px;
+              "
+            >
+              <div>
+                <div class="layer" style="margin-bottom: 12px">
+                  <span class="ltag">Conversar</span>
+                  <p>
+                    Responder sobre perfil, experiencia, skills, proyectos y
+                    encaje.
+                  </p>
+                </div>
+                <div class="layer" style="margin-bottom: 12px">
+                  <span class="ltag">Citar</span>
+                  <p>
+                    Cada hecho apunta a <span class="mono">experience:id</span>,
+                    skill o proyecto.
+                  </p>
+                </div>
+                <div class="layer" style="margin-bottom: 12px">
+                  <span class="ltag">Limitar</span>
+                  <p>
+                    Si no consta, lo dice. Off-topic: rechaza y redirige al
+                    perfil.
+                  </p>
+                </div>
+                <div class="layer">
+                  <span class="ltag">Integrar</span>
+                  <p>
+                    El mismo agente por chat y por
+                    <span class="mono">POST /v1/responses</span>.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="card accent"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                "
+              >
+                <h3 style="font-size: 19pt">Principios no negociables</h3>
+                <ul style="margin-top: 6px">
+                  <li>
+                    <strong>El LLM narra, el código posee los hechos.</strong>
+                  </li>
+                  <li>
+                    Las duraciones se
+                    <strong>calculan en dominio</strong>, no se restan en el
+                    modelo.
+                  </li>
+                  <li>
+                    Toda afirmación es <strong>citable o «no consta»</strong>.
+                  </li>
+                  <li>
+                    El canal define capacidades: tools en el chat, hechos
+                    inyectados en integración.
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p class="text-sm text-muted" style="margin-top: 18px">
+              Enfoque <strong>AI engineer</strong>: un agente operable, no solo
+              un copiloto de UI.
+            </p>
+          </div>
+        </section>
+
+        <section id="tech">
+          <p class="eyebrow">03 — 1 minuto</p>
+          <h2>Elección de tecnología</h2>
+          <div class="content">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 14px;
+              "
+            >
+              <span class="pill"
+                ><i class="fa-solid fa-layer-group"></i> Next.js App
+                Router</span
+              >
+              <span class="pill"
+                ><i class="fa-solid fa-comments"></i> CopilotKit + A2UI</span
+              >
+              <span class="pill"
+                ><i class="fa-solid fa-right-left"></i> Open Responses</span
+              >
+              <span class="pill"><i class="fa-solid fa-vial"></i> Vitest</span>
+              <span class="pill"
+                ><i class="fa-brands fa-docker"></i> Docker · CodeBuild</span
+              >
+              <span class="pill"
+                ><i class="fa-brands fa-js"></i> TypeScript · pnpm</span
+              >
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+                margin-top: 24px;
+              "
+            >
+              <div class="card">
+                <h3 style="font-size: 16pt">Perfil vs RAG</h3>
+                <p class="text-muted">
+                  El CV cabe en contexto. Hechos con IDs superan un índice
+                  vectorial para no alucinar.
+                </p>
+              </div>
+              <div class="card">
+                <h3 style="font-size: 16pt">CopilotKit vs chat propio</h3>
+                <p class="text-muted">
+                  Streaming, tools y A2UI listos. El dominio y el contrato HTTP
+                  siguen siendo nuestros.
+                </p>
+              </div>
+              <div class="card">
+                <h3 style="font-size: 16pt">Open Responses</h3>
+                <p class="text-muted">
+                  Un protocolo abierto para UI y sistemas externos, sin atar el
+                  agente a un SDK.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="ia">
+          <p class="eyebrow">04 — El LLM narra, no calcula</p>
+          <h2>Arquitectura de IA</h2>
+          <div class="content">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+              "
+            >
+              <div class="card">
+                <div class="card-icon">
+                  <i class="fa-solid fa-database"></i>
+                </div>
+                <h3>Perfil estructurado</h3>
+                <p class="text-muted">
+                  IDs, listas, enfoques y evidencia. Ausencias explícitas:
+                  certificaciones vacías.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card-icon amber">
+                  <i class="fa-solid fa-screwdriver-wrench"></i>
+                </div>
+                <h3>Tools bajo demanda</h3>
+                <p class="text-muted">
+                  Permanencia, filtros, fichas de empresa, radar y timeline.
+                  Solo si el pedido lo pide.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card-icon sky">
+                  <i class="fa-solid fa-quote-left"></i>
+                </div>
+                <h3>Citas y alcance</h3>
+                <p class="text-muted">
+                  Prompt de guardrails. Off-topic: no tools, disculpa y
+                  redirección.
+                </p>
+              </div>
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1.4fr 1fr;
+                gap: 22px;
+                margin-top: 20px;
+                align-items: stretch;
+              "
+            >
+              <blockquote
+                style="
+                  margin: 0;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                "
+              >
+                <p style="margin-right: 25px">
+                  <i class="fa-solid fa-shield-halved text-brand"></i>
+                  &nbsp;<strong
+                    >Si el dato no está en el perfil, el agente no lo
+                    rellena.</strong
+                  >
+                  Las fechas ya vienen hidratadas. Si el usuario corrige un
+                  hecho, se vuelve a consultar
+                  <span class="mono">query_profile</span>.
+                </p>
+              </blockquote>
+              <div
+                class="card"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                "
+              >
+                <h3 style="font-size: 15pt">Proveedor</h3>
+                <p class="text-sm text-muted" style="margin: 4px 0">
+                  Chat / integración:
+                  <span class="mono">OPEN_RESPONSES_MODEL</span>
+                </p>
+                <p class="text-sm text-muted" style="margin: 4px 0">
+                  Default: <span class="mono">gpt-4o-mini</span>
+                </p>
+                <p class="text-sm text-muted" style="margin: 4px 0">
+                  <span class="mono">maxSteps</span> <strong>8</strong> ·
+                  intercambiable
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="arquitectura">
+          <p class="eyebrow">05 — Visión técnica</p>
+          <h2>Arquitectura</h2>
+          <div class="content">
+            <div class="arch">
+              <div class="arch-stack">
+                <div class="arch-layer alt">
+                  <div class="arch-head">
+                    <span class="arch-tag">Canales</span>
+                    <span class="arch-hint"
+                      >humano o máquina, mismo perfil</span
+                    >
+                  </div>
+                  <div class="arch-chips">
+                    <span class="arch-chip">Chat · /api/copilotkit</span>
+                    <span class="arch-chip">POST /v1/responses</span>
+                  </div>
+                </div>
+                <div class="arch-join">
+                  <i class="fa-solid fa-arrow-down"></i>
+                </div>
+                <div class="arch-layer alt">
+                  <div class="arch-head">
+                    <span class="arch-tag">Adapters</span>
+                    <span class="arch-hint">cáscara: runtime, HTTP, tools</span>
+                  </div>
+                  <div class="arch-chips">
+                    <span class="arch-chip">BuiltInAgent</span>
+                    <span class="arch-chip">query_profile</span>
+                    <span class="arch-chip">lookup_company</span>
+                    <span class="arch-chip">A2UI</span>
+                  </div>
+                </div>
+                <div class="arch-join">
+                  <i class="fa-solid fa-arrow-down"></i>
+                </div>
+                <div class="arch-layer nucleus">
+                  <div class="arch-head">
+                    <span class="arch-tag">Application · núcleo</span>
+                    <span class="arch-hint">arma el perfil y el prompt</span>
+                  </div>
+                  <div class="arch-chips">
+                    <span class="arch-chip">profile.ts</span>
+                    <span class="arch-chip">prompt.ts</span>
+                    <span class="arch-chip">agent.ts</span>
+                  </div>
+                </div>
+                <div class="arch-join">
+                  <i class="fa-solid fa-arrow-down"></i>
+                </div>
+                <div class="arch-layer">
+                  <div class="arch-head">
+                    <span class="arch-tag">Domain</span>
+                    <span class="arch-hint"
+                      >el código calcula; el LLM no resta</span
+                    >
+                  </div>
+                  <div class="arch-chips">
+                    <span class="arch-chip">tenure</span>
+                    <span class="arch-chip">query-profile</span>
+                    <span class="arch-chip">tech-index</span>
+                    <span class="arch-chip">lookup-company</span>
+                  </div>
+                </div>
+                <div class="arch-join">
+                  <i class="fa-solid fa-arrow-down"></i>
+                </div>
+                <div class="arch-layer">
+                  <div class="arch-head">
+                    <span class="arch-tag">Data</span>
+                    <span class="arch-hint">fuente de verdad del CV</span>
+                  </div>
+                  <div class="arch-chips">
+                    <span class="arch-chip">cv.ts</span>
+                    <span class="arch-chip">companies.ts</span>
+                  </div>
+                </div>
+              </div>
+              <div class="arch-side">
+                <div class="card brand-fill">
+                  <h3 style="font-size: 15pt">Modelo</h3>
+                  <p style="font-size: 12.5pt; margin: 0">
+                    Open Responses. Copia
+                    <span class="mono">durationLabel</span>. No resta fechas.
+                  </p>
+                </div>
+                <div class="card accent">
+                  <h3 style="font-size: 15pt">Una fuente</h3>
+                  <p class="text-sm text-muted" style="margin: 0">
+                    Chat con tools y A2UI. Integración con hechos ya inyectados
+                    y <span class="mono">INTERNAL_API_KEY</span>.
+                  </p>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                  "
+                >
+                  <div class="stat" style="padding: 12px 14px">
+                    <p class="num dark" style="font-size: 22pt">2</p>
+                    <p class="label" style="margin: 4px 0 0">canales</p>
+                  </div>
+                  <div class="stat" style="padding: 12px 14px">
+                    <p class="num dark" style="font-size: 22pt">4</p>
+                    <p class="label" style="margin: 4px 0 0">tools</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="demo"
+          class="section-divider"
+          data-state="is-section-divider"
+        >
+          <p class="eyebrow">06</p>
+          <h1>Demo en vivo</h1>
+          <p style="max-width: 760px; margin-top: 14px">
+            Del lienzo del CV a la respuesta citada, con tool y evidencia.
+          </p>
+          <div
+            style="display: flex; gap: 20px; margin-top: 34px; flex-wrap: wrap"
+          >
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span
+                class="logo"
+                style="
+                  width: 42px;
+                  height: 42px;
+                  border-radius: 12px;
+                  background: rgba(255, 255, 255, 0.12);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #fff;
+                  font-size: 17pt;
+                "
+                ><i class="fa-solid fa-comment"></i
+              ></span>
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.85)">
+                Preguntar
+              </p>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                color: var(--brand-300);
+                font-size: 18pt;
+              "
+            >
+              <i class="fa-solid fa-arrow-right-long"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span
+                class="logo"
+                style="
+                  width: 42px;
+                  height: 42px;
+                  border-radius: 12px;
+                  background: rgba(255, 255, 255, 0.12);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #fff;
+                  font-size: 17pt;
+                "
+                ><i class="fa-solid fa-screwdriver-wrench"></i
+              ></span>
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.85)">
+                Consultar hechos
+              </p>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                color: var(--brand-300);
+                font-size: 18pt;
+              "
+            >
+              <i class="fa-solid fa-arrow-right-long"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span
+                class="logo"
+                style="
+                  width: 42px;
+                  height: 42px;
+                  border-radius: 12px;
+                  background: rgba(255, 255, 255, 0.12);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #fff;
+                  font-size: 17pt;
+                "
+                ><i class="fa-solid fa-circle-check"></i
+              ></span>
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.85)">
+                Citar y responder
+              </p>
+            </div>
+          </div>
+          <p
+            class="text-sm"
+            style="
+              position: absolute;
+              bottom: 40px;
+              left: 64px;
+              color: rgba(255, 255, 255, 0.55) !important;
+            "
+          >
+            <span class="kbd">pnpm dev</span> &nbsp;·&nbsp;
+            http://localhost:3000
+          </p>
+        </section>
+
+        <section id="scaffolding">
+          <p class="eyebrow">07 — Fundación del repo</p>
+          <h2>Scaffolding del proyecto</h2>
+          <div class="content">
+            <p class="text-sm text-muted" style="margin-top: -4px">
+              Enfoque <strong>documentation-first</strong>: las reglas del
+              agente viven en specs. El perfil se hidrata; el prompt y las tools
+              lo leen. Una fuente nueva no reconstruye el runtime.
+            </p>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 14px;
+                margin-top: 14px;
+              "
+            >
+              <div class="card accent">
+                <div class="card-icon">
+                  <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <h3 style="font-size: 15pt">
+                  <span class="mono">.cursor/specs/</span>
+                </h3>
+                <p class="text-sm text-muted" style="margin: 0">
+                  Open Responses, UI, perfil, hechos y A2UI — el contrato antes
+                  del código.
+                </p>
+              </div>
+              <div class="card accent">
+                <div class="card-icon amber">
+                  <i class="fa-solid fa-id-card"></i>
+                </div>
+                <h3 style="font-size: 15pt">
+                  <span class="mono">src/data/</span>
+                </h3>
+                <p class="text-sm text-muted" style="margin: 0">
+                  CV y empresas. Actualizar datos no toca el agente.
+                </p>
+              </div>
+              <div class="card accent">
+                <div class="card-icon green">
+                  <i class="fa-solid fa-gears"></i>
+                </div>
+                <h3 style="font-size: 15pt">
+                  <span class="mono">src/domain/</span>
+                </h3>
+                <p class="text-sm text-muted" style="margin: 0">
+                  Fechas, permanencia, query y lookup — el motor de hechos.
+                </p>
+              </div>
+              <div class="card accent">
+                <div class="card-icon sky">
+                  <i class="fa-solid fa-comments"></i>
+                </div>
+                <h3 style="font-size: 15pt">
+                  <span class="mono">src/adapters/</span>
+                </h3>
+                <p class="text-sm text-muted" style="margin: 0">
+                  CopilotKit, Open Responses, auth y tools HTTP.
+                </p>
+              </div>
+            </div>
+            <div
+              style="
+                margin-top: 22px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+              "
+            >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-book"></i>
+                <span class="mono">README.md</span> — onboarding y curl</span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-gears"></i>
+                <span class="mono">prompt.ts</span> — alcance y citas</span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-brands fa-docker"></i>
+                <span class="mono">Dockerfile</span> — standalone</span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-vial"></i>
+                <span class="mono">evaluation/</span> — juez y golden set</span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-vial"></i>
+                <span class="mono">*.test.ts</span> — 14 suites</span
+              >
+            </div>
+            <p class="text-sm text-muted" style="margin-top: 16px">
+              Arquitectura hexagonal:
+              <span class="mono">data</span> →
+              <span class="mono">domain</span> →
+              <span class="mono">application</span> →
+              <span class="mono">adapters</span>. El dominio no conoce
+              CopilotKit ni HTTP; el runtime es un puerto intercambiable.
+            </p>
+          </div>
+        </section>
+
+        <section id="datos">
+          <p class="eyebrow">08 — Hechos con ID</p>
+          <h2>Estructura de datos</h2>
+          <div class="content">
+            <p class="text-sm text-muted" style="margin-top: -4px">
+              El CV no es prosa: es un grafo de hechos. El código hidrata
+              fechas; el modelo solo cita
+              <span class="mono">durationLabel</span> y el
+              <span class="mono">id</span>.
+            </p>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1.15fr;
+                gap: 20px;
+                margin-top: 14px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 0">
+                <div class="layer alt">
+                  <span class="ltag">Fuente</span>
+                  <p>
+                    <span class="mono">cv.ts</span> ·
+                    <span class="mono">companies.ts</span> — start/end crudos,
+                    listas, ausencias vacías
+                  </p>
+                </div>
+                <div class="arch-join">
+                  <i class="fa-solid fa-arrow-down"></i>
+                </div>
+                <div class="layer">
+                  <span class="ltag">Hidrata</span>
+                  <p>
+                    <span class="mono">period</span>,
+                    <span class="mono">durationMonths</span>,
+                    <span class="mono">durationLabel</span> y
+                    <span class="mono">tenures</span>
+                  </p>
+                </div>
+                <div class="arch-join">
+                  <i class="fa-solid fa-arrow-down"></i>
+                </div>
+                <div class="layer" style="border-left-color: var(--brand-500)">
+                  <span class="ltag">Profile</span>
+                  <p>Snapshot cacheado. Actualizar datos no toca el runtime.</p>
+                </div>
+              </div>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px"
+              >
+                <div class="card" style="padding: 14px 16px">
+                  <h3 style="font-size: 14pt; margin-bottom: 4px">
+                    Experiencia
+                  </h3>
+                  <p class="text-sm text-muted" style="margin: 0">
+                    <span class="mono">experience:id</span> · roles, techs,
+                    enfoques
+                  </p>
+                </div>
+                <div class="card" style="padding: 14px 16px">
+                  <h3 style="font-size: 14pt; margin-bottom: 4px">Proyectos</h3>
+                  <p class="text-sm text-muted" style="margin: 0">
+                    <span class="mono">project:id</span> · problema, stack,
+                    resultados
+                  </p>
+                </div>
+                <div class="card" style="padding: 14px 16px">
+                  <h3 style="font-size: 14pt; margin-bottom: 4px">Skills</h3>
+                  <p class="text-sm text-muted" style="margin: 0">
+                    <span class="mono">skill:nombre</span> · nivel 1–5 +
+                    evidencia
+                  </p>
+                </div>
+                <div class="card" style="padding: 14px 16px">
+                  <h3 style="font-size: 14pt; margin-bottom: 4px">
+                    Permanencia
+                  </h3>
+                  <p class="text-sm text-muted" style="margin: 0">
+                    Un tramo por empresa. No se fusiona el grupo.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px"
+            >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-link"></i>
+                <span class="mono">experience:id</span></span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-link"></i>
+                <span class="mono">project:id</span></span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-link"></i>
+                <span class="mono">skill:nombre</span></span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-link"></i>
+                <span class="mono">company:slug</span></span
+              >
+              <span class="pill pill-sm"
+                ><i class="fa-solid fa-link"></i>
+                <span class="mono">identity</span></span
+              >
+            </div>
+          </div>
+        </section>
+
+        <section id="prompt">
+          <p class="eyebrow">09 — El LLM narra con reglas</p>
+          <h2>Prompt de sistema</h2>
+          <div class="content">
+            <p class="text-sm text-muted" style="margin-top: -4px">
+              <span class="mono">cvToAgentPrompt(profile, canal)</span> arma el
+              texto del perfil hidratado. No es un prompt fijo: si cambia el CV,
+              cambia el prompt.
+            </p>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1.2fr 1fr;
+                gap: 18px;
+                margin-top: 14px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <div class="layer">
+                  <span class="ltag" style="min-width: 28px">1</span>
+                  <p>
+                    <strong>Saludo solo</strong> · bienvenida breve. Sin tools.
+                  </p>
+                </div>
+                <div class="layer">
+                  <span class="ltag" style="min-width: 28px">2</span>
+                  <p>
+                    <strong>Habla del perfil</strong> · responde. Si no consta,
+                    lo dice. Premisa falsa, la corrige.
+                  </p>
+                </div>
+                <div class="layer alt">
+                  <span class="ltag" style="min-width: 28px">3</span>
+                  <p>
+                    <strong>Fuera de alcance</strong> · rechaza y redirige.
+                    Código, recetas, otra persona.
+                  </p>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <div class="card accent" style="padding: 14px 16px">
+                  <h3 style="font-size: 14pt; margin-bottom: 4px">Chat</h3>
+                  <p class="text-sm text-muted" style="margin: 0">
+                    Tools: <span class="mono">query_profile</span>,
+                    <span class="mono">lookup_company</span>, radar y timeline.
+                    Fichas bajo demanda.
+                  </p>
+                </div>
+                <div class="card" style="padding: 14px 16px">
+                  <h3 style="font-size: 14pt; margin-bottom: 4px">
+                    Integración
+                  </h3>
+                  <p class="text-sm text-muted" style="margin: 0">
+                    Sin tools. Permanencia y fichas ya van en el prompt.
+                    <span class="mono">POST /v1/responses</span>.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px"
+            >
+              <span class="badge matched">Siempre español</span>
+              <span class="badge review">Copia durationLabel</span>
+              <span class="badge partial">Una cita por hecho</span>
+              <span class="badge unmatched">Lista vacía = no consta</span>
+              <span class="badge suspicious">No inventa código</span>
+            </div>
+            <p class="text-sm text-muted" style="margin-top: 14px">
+              El perfil cabe en la ventana de contexto. Inyectarlo completo
+              sustituye a un vector store: no hay chunking ni retrieval que
+              omita un hecho citable o fabrique uno ausente.
+            </p>
+          </div>
+        </section>
+
+        <section id="evaluacion">
+          <p class="eyebrow">10 — Cómo sabemos que funciona</p>
+          <h2>Evaluation pipeline</h2>
+          <div class="content">
+            <p class="text-muted" style="margin-top: -4px">
+              Si cambio el prompt, el CV o el modelo,
+              <strong
+                >¿el agente sigue siendo fiable delante de un
+                reclutador?</strong
+              >
+              <span class="mono">pnpm eval</span> responde con un semáforo, no
+              con un curl.
+            </p>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1.15fr 1fr;
+                gap: 20px;
+                margin-top: 16px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 12px">
+                <div
+                  class="card"
+                  style="
+                    padding: 16px 20px;
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 14px;
+                  "
+                >
+                  <div class="card-icon" style="margin: 0; flex-shrink: 0">
+                    <i class="fa-solid fa-list-check"></i>
+                  </div>
+                  <div>
+                    <h3 style="font-size: 15pt; margin-bottom: 4px">
+                      Capa 1 · Determinista
+                    </h3>
+                    <p class="text-sm text-muted" style="margin: 0">
+                      Inclusión, citas, idioma y rechazos. Gratis y
+                      reproducible: un LLM no opina si «Cerocatorce» aparece.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="card"
+                  style="
+                    padding: 16px 20px;
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 14px;
+                  "
+                >
+                  <div
+                    class="card-icon amber"
+                    style="margin: 0; flex-shrink: 0"
+                  >
+                    <i class="fa-solid fa-scale-balanced"></i>
+                  </div>
+                  <div>
+                    <h3 style="font-size: 15pt; margin-bottom: 4px">
+                      Capa 2 · LLM-as-a-Judge
+                    </h3>
+                    <p class="text-sm text-muted" style="margin: 0">
+                      Fundamentación, exactitud y alcance. Juez
+                      <span class="mono">gpt-4o</span>, distinto del agente, con
+                      rúbrica anclada y perfil real aparte de la referencia.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px"
+              >
+                <div class="stat">
+                  <div class="num">43</div>
+                  <p class="label">casos probables</p>
+                </div>
+                <div class="stat">
+                  <div class="num">8</div>
+                  <p class="label">categorías de preguntas</p>
+                </div>
+                <div class="stat">
+                  <div class="num">100%</div>
+                  <p class="label">críticos deben pasar</p>
+                </div>
+                <div class="stat">
+                  <div class="num">85%</div>
+                  <p class="label">pass rate mínimo</p>
+                </div>
+              </div>
+            </div>
+            <div
+              style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px"
+            >
+              <span class="badge matched">hechos</span>
+              <span class="badge review">fechas</span>
+              <span class="badge partial">ausencia</span>
+              <span class="badge unmatched">reclutador</span>
+              <span class="badge suspicious">técnico</span>
+              <span class="badge matched">alcance</span>
+              <span class="badge review">adversario</span>
+              <span class="badge partial">conversación</span>
+            </div>
+            <p class="text-sm text-muted" style="margin-top: 14px">
+              El ground truth no se importa del CV: si el cálculo de fechas se
+              rompe, el eval no se rompe con él.
+              <span class="mono">--baseline</span> marca regresiones al tocar el
+              prompt.
+            </p>
+          </div>
+        </section>
+
+        <section id="roadmap">
+          <p class="eyebrow">11 — Hacia producción</p>
+          <h2>Roadmap</h2>
+          <div class="content">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 14px;
+              "
+            >
+              <div class="card accent">
+                <div class="card-icon green">
+                  <i class="fa-solid fa-vial-circle-check"></i>
+                </div>
+                <h3 style="font-size: 16pt">Calidad</h3>
+                <ul class="text-sm">
+                  <li>Evals en CI contra baseline</li>
+                  <li>Segundo target: canal de chat</li>
+                </ul>
+              </div>
+              <div class="card accent">
+                <div class="card-icon amber">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 style="font-size: 16pt">Observabilidad</h3>
+                <ul class="text-sm">
+                  <li>Trazas y costo por turno</li>
+                  <li>Códigos de error ya estables</li>
+                </ul>
+              </div>
+              <div class="card accent">
+                <div class="card-icon sky">
+                  <i class="fa-solid fa-arrows-up-to-line"></i>
+                </div>
+                <h3 style="font-size: 16pt">Escala</h3>
+                <ul class="text-sm">
+                  <li>Sesiones persistidas</li>
+                  <li>Auth en la UI si el canal lo pide</li>
+                </ul>
+              </div>
+              <div class="card accent">
+                <div class="card-icon">
+                  <i class="fa-solid fa-puzzle-piece"></i>
+                </div>
+                <h3 style="font-size: 16pt">Orquestación</h3>
+                <ul class="text-sm">
+                  <li>MCP o A2A hacia un hub interno</li>
+                  <li>Tools también en integración</li>
+                </ul>
+              </div>
+            </div>
+            <div
+              class="card brand-fill"
+              style="
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+              "
+            >
+              <p style="margin: 0; font-size: 17pt">
+                <strong>Base sólida:</strong> de agente útil a agente medible.
+              </p>
+              <span
+                class="badge"
+                style="
+                  background: rgba(255, 255, 255, 0.18);
+                  color: #fff;
+                  flex-shrink: 0;
+                "
+                >Listo para crecer</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="thanks"
+          class="section-divider"
+          data-state="is-section-divider"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          "
+        >
+          <div class="brand-mark" style="justify-content: center">
+            <span class="logo"><i class="fa-solid fa-id-card"></i></span>
+            <span class="wordmark">Curriculum AI · Banorte</span>
+          </div>
+          <h1 style="font-size: 120pt; margin-top: 24px">Gracias</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="./js/deck.js"></script>
+  </body>
+</html>

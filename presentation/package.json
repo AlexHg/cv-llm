@@ -1,0 +1,9 @@
+{
+  "name": "cv-llm-deck",
+  "private": true,
+  "description": "Presentación reveal.js de cv-llm — Reto IA Banorte",
+  "scripts": {
+    "start": "npx --yes serve . -l 5173",
+    "dev": "npx --yes serve . -l 5173"
+  }
+}
